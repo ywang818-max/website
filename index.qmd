@@ -1,11 +1,28 @@
 ---
-title: "yixuan-website"
+title: ""
 ---
 
-This is a Quarto website.
+::::: columns
+::: {.column width="35%"}
+![](images/71c4ee63cb26bc2eea4d2fbc1e02068c.jpg){width="100%"}
+:::
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+::: {.column width="65%"}
+![](images/UniversityofPennsylvania_FullLogo_RGB.png){width="250px"}
 
-```{r}
-1 + 1
-```
+# Yixuan Wang
+
+University of Pennsylvania
+
+I am a graduate student in Applied Economics and Data Science at the University of Pennsylvania, with interests in economics, data analysis, and business applications.
+
+### Quick Links
+
+<div>
+  <a href="https://github.com/ywang818-max"><i class="bi bi-github fs-3"></i></a>
+  <a href="https://linkedin.com/in/USERNAME"><i class="bi bi-linkedin fs-3"></i></a>
+  <a href="resume.qmd"><i class="bi bi-file-earmark-person-fill fs-3"></i></a>
+  <a href="mailto:ywang818@sas.upenn.edu"><i class="bi bi-envelope-fill fs-3"></i></a>
+</div>
+:::
+:::::

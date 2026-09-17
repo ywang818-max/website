@@ -82,5 +82,131 @@
     "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
     "section": "",
     "text": "When I first learned about functions, I became used to seeing variables such as \\(x\\) and \\(y\\), and sometimes \\(z\\) or other letters. These variables usually represent objects that already exist in the original problem. So even when more variables are introduced, I still understand what they represent.\nHowever, when I first learned about Lagrange multipliers, I had a different question. If the original optimization problem only has \\(x\\) and \\(y\\), why does a new variable, \\(\\lambda\\), suddenly appear when we solve it? It is not a new good, and it is not something we were originally asked to choose. So why are we allowed to introduce \\(\\lambda\\), and what role does it actually play in the problem?\nFor me, the key to understanding Lagrange multipliers is not simply learning how to differentiate the Lagrangian. It is first understanding where this extra \\(\\lambda\\) comes from and why it is useful."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Yixuan Wang",
+    "section": "",
+    "text": "Yixuan Wang\nUniversity of Pennsylvania\nI am a graduate student in Applied Economics and Data Science at the University of Pennsylvania, with interests in economics, data analysis, and business applications.\n\nQuick Links"
+  },
+  {
+    "objectID": "bio.html",
+    "href": "bio.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I am a graduate student in Applied Economics and Data Science at the University of Pennsylvania. My academic background is in economics and statistics, and I am interested in applying data analysis to business and economic decision-making. My professional interests include strategy, business analytics, and data-driven decision-making."
+  },
+  {
+    "objectID": "bio.html#education",
+    "href": "bio.html#education",
+    "title": "About Me",
+    "section": "Education",
+    "text": "Education\nMaster of Applied Economics and Data Science, University of Pennsylvania (expected 2027)\nBachelor of Arts in Economics, Boston University, 2026"
+  },
+  {
+    "objectID": "bio.html#interests",
+    "href": "bio.html#interests",
+    "title": "About Me",
+    "section": "Interests",
+    "text": "Interests\n\nApplied Economics\nData Analysis\nBusiness Analytics\nStrategy and Decision-Making"
+  },
+  {
+    "objectID": "bio.html#technical-skills",
+    "href": "bio.html#technical-skills",
+    "title": "About Me",
+    "section": "Technical Skills",
+    "text": "Technical Skills\n\nR\nPython\nStatistical Analysis\nData Visualization"
+  },
+  {
+    "objectID": "bio.html#career-goals",
+    "href": "bio.html#career-goals",
+    "title": "About Me",
+    "section": "Career Goals",
+    "text": "Career Goals\nI am interested in roles that combine economics, data analysis, and business strategy."
+  },
+  {
+    "objectID": "bio.html#contact",
+    "href": "bio.html#contact",
+    "title": "About Me",
+    "section": "Contact",
+    "text": "Contact"
+  },
+  {
+    "objectID": "bio.html#ywang818sas.upenn.edu",
+    "href": "bio.html#ywang818sas.upenn.edu",
+    "title": "About Me",
+    "section": "ywang818@sas.upenn.edu",
+    "text": "ywang818@sas.upenn.edu"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Resume",
+    "section": "",
+    "text": "Download my resume here:"
+  },
+  {
+    "objectID": "resume.html#resume-pdf",
+    "href": "resume.html#resume-pdf",
+    "title": "Resume",
+    "section": "## Resume PDF",
+    "text": "## Resume PDF"
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html",
+    "href": "blog/posts/post1/week-01/index.html",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "",
+    "text": "When I first learned about functions, I became used to seeing variables such as \\(x\\) and \\(y\\), and sometimes \\(z\\) or other letters. These variables usually represent objects that already exist in the original problem. So even when more variables are introduced, I still understand what they represent.\nHowever, when I first learned about Lagrange multipliers, I had a different question. If the original optimization problem only has \\(x\\) and \\(y\\), why does a new variable, \\(\\lambda\\), suddenly appear when we solve it? It is not a new good, and it is not something we were originally asked to choose. So why are we allowed to introduce \\(\\lambda\\), and what role does it actually play in the problem?\nFor me, the key to understanding Lagrange multipliers is not simply learning how to differentiate the Lagrangian. It is first understanding where this extra \\(\\lambda\\) comes from and why it is useful."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#why-does-lambda-suddenly-appear",
+    "href": "blog/posts/post1/week-01/index.html#why-does-lambda-suddenly-appear",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "",
+    "text": "When I first learned about functions, I became used to seeing variables such as \\(x\\) and \\(y\\), and sometimes \\(z\\) or other letters. These variables usually represent objects that already exist in the original problem. So even when more variables are introduced, I still understand what they represent.\nHowever, when I first learned about Lagrange multipliers, I had a different question. If the original optimization problem only has \\(x\\) and \\(y\\), why does a new variable, \\(\\lambda\\), suddenly appear when we solve it? It is not a new good, and it is not something we were originally asked to choose. So why are we allowed to introduce \\(\\lambda\\), and what role does it actually play in the problem?\nFor me, the key to understanding Lagrange multipliers is not simply learning how to differentiate the Lagrangian. It is first understanding where this extra \\(\\lambda\\) comes from and why it is useful."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#a-simple-constrained-optimization-problem",
+    "href": "blog/posts/post1/week-01/index.html#a-simple-constrained-optimization-problem",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "A Simple Constrained Optimization Problem",
+    "text": "A Simple Constrained Optimization Problem\nTo understand where \\(\\lambda\\) comes from, I first went back to the original problem before the Lagrange multiplier is introduced. At this point, the problem still looks familiar because the only things we need to choose are \\(x\\) and \\(y\\).\nFor example, suppose a consumer chooses two goods, \\(x\\) and \\(y\\), and wants to achieve the highest possible utility:\n\\[\n\\max_{x,y} U(x,y)\n\\]\nIf there were no limits, the consumer could simply keep choosing more of both goods. In reality, however, income is limited. If the prices of the two goods are \\(p_x\\) and \\(p_y\\), and the consumer has income \\(M\\), then the choices must also satisfy the budget constraint:\n\\[\np_xx + p_yy = M\n\\]\nUp to this point, nothing new has appeared. The variables \\(x\\) and \\(y\\) are still the actual choices made by the consumer, while \\(p_x\\), \\(p_y\\), and \\(M\\) are given. The important difference is that the consumer is no longer asking only, “Which combination of \\(x\\) and \\(y\\) gives me the highest utility?” The real question is:\nAmong all the combinations I can actually afford, which one gives me the highest utility?\nThis changes the problem from ordinary optimization into constrained optimization. There is now both an objective we want to maximize and a constraint we are not allowed to violate.\nThis is where I started to see why an additional tool might be necessary. If \\(x\\) and \\(y\\) are still the only actual choices, then what exactly is \\(\\lambda\\) doing?"
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#what-is-lambda-doing",
+    "href": "blog/posts/post1/week-01/index.html#what-is-lambda-doing",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "What Is \\(\\lambda\\) Doing?",
+    "text": "What Is \\(\\lambda\\) Doing?\nThe easiest way for me to understand \\(\\lambda\\) is to stop thinking of it as another variable like \\(x\\) or \\(y\\).\nThe consumer is not free to choose any point. Because of the budget constraint,\n\\[\np_xx+p_yy=M,\n\\]\nthe consumer can only move along the budget line. The goal is to find the point on that line that gives the highest possible utility.\nAt the optimum, the budget line is tangent to the highest indifference curve the consumer can reach. At that point, the direction of the objective function and the direction of the constraint are aligned.\nMathematically, this relationship is written as\n\\[\n\\nabla U = \\lambda \\nabla g.\n\\]\nHere, \\(\\lambda\\) is not another good or another choice. It is simply the proportionality factor that connects the objective function to the constraint at the optimum.\nThis is what made \\(\\lambda\\) easier for me to understand: it does not create a new economic choice. It helps describe how the original objective and the original constraint fit together at the best feasible point."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#seeing-the-intuition-graphically",
+    "href": "blog/posts/post1/week-01/index.html#seeing-the-intuition-graphically",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "Seeing the Intuition Graphically",
+    "text": "Seeing the Intuition Graphically\nThe graphical view makes the idea easier to understand. Because of the budget constraint, the consumer cannot choose every possible combination of \\(x\\) and \\(y\\). The goal is to reach the highest indifference curve that is still affordable.\n\n\n\nUtility maximization under a budget constraint. The optimal bundle occurs where the budget line is tangent to the highest attainable indifference curve.\n\n\nAt the optimal point, the budget line is tangent to the highest attainable indifference curve. This means that their slopes are equal:\n\\[\nMRS=\\frac{p_x}{p_y}.\n\\]\nThe MRS represents the consumer’s willingness to trade one good for another, while the price ratio represents the trade-off imposed by the market. At the optimum, these two trade-offs match."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#what-does-lambda-actually-mean",
+    "href": "blog/posts/post1/week-01/index.html#what-does-lambda-actually-mean",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "What Does \\(\\lambda\\) Actually Mean?",
+    "text": "What Does \\(\\lambda\\) Actually Mean?\nThe Lagrange multiplier is more than a mathematical tool. It also tells us how valuable the constraint is.\nSuppose the consumer’s budget increases slightly, from $100 to $101. With the extra dollar, the consumer may be able to reach a slightly higher level of utility. The multiplier \\(\\lambda\\) measures how much the best possible outcome changes when the budget constraint is relaxed a little.\nIn this sense, \\(\\lambda\\) is often called the shadow value or shadow price of the constraint. A larger \\(\\lambda\\) means that relaxing the constraint is more valuable, while a smaller \\(\\lambda\\) means that an additional unit of the resource has less effect.\nSo \\(\\lambda\\) is not simply an extra symbol added to the equation. It tells us something economically meaningful about the value of having a little more of the limited resource."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#why-it-initially-feels-unintuitive",
+    "href": "blog/posts/post1/week-01/index.html#why-it-initially-feels-unintuitive",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "Why It Initially Feels Unintuitive",
+    "text": "Why It Initially Feels Unintuitive\nLagrange multipliers initially feel confusing because \\(\\lambda\\) looks like a new variable that suddenly appears in a problem that originally only involved \\(x\\) and \\(y\\). The key is that \\(\\lambda\\) does not represent another choice. Instead, it is connected to the constraint and helps describe how the objective and the constraint interact at the optimum.\nOnce I stopped thinking of \\(\\lambda\\) as another variable like \\(x\\) or \\(y\\), the method became much easier to understand. It is not adding a new economic decision; it is helping us solve the original problem under a limitation."
+  },
+  {
+    "objectID": "blog/posts/post1/week-01/index.html#takeaway",
+    "href": "blog/posts/post1/week-01/index.html#takeaway",
+    "title": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively",
+    "section": "Takeaway",
+    "text": "Takeaway\nThe Lagrange multiplier is not just a mathematical trick. It helps us solve an optimization problem when there is a constraint, and it also gives the constraint an economic meaning.\nThe main idea I would remember is simple: \\(x\\) and \\(y\\) are the choices, while \\(\\lambda\\) tells us how important the constraint is and how valuable it would be to relax that constraint slightly."
   }
 ]

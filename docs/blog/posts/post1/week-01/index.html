@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Yixuan Wang">
+<meta name="dcterms.date" content="2026-09-14">
 
-<title>Yixuan Wang</title>
+<title>Where Does λ Come From? Understanding Lagrange Multipliers Intuitively – Yixuan Wang</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,23 +28,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,8 +73,37 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -82,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Yixuan Wang</span>
     </a>
   </div>
@@ -93,20 +124,20 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./bio.html"> 
+    <a class="nav-link" href="../../../../bio.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./resume.html"> 
+    <a class="nav-link" href="../../../../resume.html"> 
 <span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog/index.html"> 
-<span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../../../blog/index.html"> 
+<span class="menu-text">Untitled</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -121,31 +152,116 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Where Does λ Come From? Understanding Lagrange Multipliers Intuitively</h1>
+<p class="subtitle lead">Why an extra symbol appears in a problem that originally only had x and y</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Optimization</div>
+    <div class="quarto-category">Economics</div>
+  </div>
+  </div>
 
 
 
+<div class="quarto-title-meta">
 
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img src="images/71c4ee63cb26bc2eea4d2fbc1e02068c.jpg" class="img-fluid" style="width:100.0%"></p>
-</div><div class="column" style="width:65%;">
-<p><img src="images/UniversityofPennsylvania_FullLogo_RGB.png" class="img-fluid" width="250"></p>
-<section id="yixuan-wang" class="level1">
-<h1>Yixuan Wang</h1>
-<p>University of Pennsylvania</p>
-<p>I am a graduate student in Applied Economics and Data Science at the University of Pennsylvania, with interests in economics, data analysis, and business applications.</p>
-<section id="quick-links" class="level3">
-<h3 class="anchored" data-anchor-id="quick-links">Quick Links</h3>
-<div>
-<p><a href="https://github.com/ywang818-max"><i class="bi bi-github fs-3"></i></a> <a href="https://linkedin.com/in/USERNAME"><i class="bi bi-linkedin fs-3"></i></a> <a href="./resume.html"><i class="bi bi-file-earmark-person-fill fs-3"></i></a> <a href="mailto:ywang818@sas.upenn.edu"><i class="bi bi-envelope-fill fs-3"></i></a></p>
-</div>
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yixuan Wang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 14, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="why-does-lambda-suddenly-appear" class="level2">
+<h2 class="anchored" data-anchor-id="why-does-lambda-suddenly-appear">Why Does <span class="math inline">\(\lambda\)</span> Suddenly Appear?</h2>
+<p>When I first learned about functions, I became used to seeing variables such as <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and sometimes <span class="math inline">\(z\)</span> or other letters. These variables usually represent objects that already exist in the original problem. So even when more variables are introduced, I still understand what they represent.</p>
+<p>However, when I first learned about Lagrange multipliers, I had a different question. If the original optimization problem only has <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, why does a new variable, <span class="math inline">\(\lambda\)</span>, suddenly appear when we solve it? It is not a new good, and it is not something we were originally asked to choose. So why are we allowed to introduce <span class="math inline">\(\lambda\)</span>, and what role does it actually play in the problem?</p>
+<p>For me, the key to understanding Lagrange multipliers is not simply learning how to differentiate the Lagrangian. It is first understanding where this extra <span class="math inline">\(\lambda\)</span> comes from and why it is useful.</p>
 </section>
+<section id="a-simple-constrained-optimization-problem" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-constrained-optimization-problem">A Simple Constrained Optimization Problem</h2>
+<p>To understand where <span class="math inline">\(\lambda\)</span> comes from, I first went back to the original problem before the Lagrange multiplier is introduced. At this point, the problem still looks familiar because the only things we need to choose are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>For example, suppose a consumer chooses two goods, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and wants to achieve the highest possible utility:</p>
+<p><span class="math display">\[
+\max_{x,y} U(x,y)
+\]</span></p>
+<p>If there were no limits, the consumer could simply keep choosing more of both goods. In reality, however, income is limited. If the prices of the two goods are <span class="math inline">\(p_x\)</span> and <span class="math inline">\(p_y\)</span>, and the consumer has income <span class="math inline">\(M\)</span>, then the choices must also satisfy the budget constraint:</p>
+<p><span class="math display">\[
+p_xx + p_yy = M
+\]</span></p>
+<p>Up to this point, nothing new has appeared. The variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are still the actual choices made by the consumer, while <span class="math inline">\(p_x\)</span>, <span class="math inline">\(p_y\)</span>, and <span class="math inline">\(M\)</span> are given. The important difference is that the consumer is no longer asking only, “Which combination of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> gives me the highest utility?” The real question is:</p>
+<p><strong>Among all the combinations I can actually afford, which one gives me the highest utility?</strong></p>
+<p>This changes the problem from ordinary optimization into <strong>constrained optimization</strong>. There is now both an objective we want to maximize and a constraint we are not allowed to violate.</p>
+<p>This is where I started to see why an additional tool might be necessary. If <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are still the only actual choices, then what exactly is <span class="math inline">\(\lambda\)</span> doing?</p>
 </section>
+<section id="what-is-lambda-doing" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-lambda-doing">What Is <span class="math inline">\(\lambda\)</span> Doing?</h2>
+<p>The easiest way for me to understand <span class="math inline">\(\lambda\)</span> is to stop thinking of it as another variable like <span class="math inline">\(x\)</span> or <span class="math inline">\(y\)</span>.</p>
+<p>The consumer is not free to choose any point. Because of the budget constraint,</p>
+<p><span class="math display">\[
+p_xx+p_yy=M,
+\]</span></p>
+<p>the consumer can only move along the budget line. The goal is to find the point on that line that gives the highest possible utility.</p>
+<p>At the optimum, the budget line is tangent to the highest indifference curve the consumer can reach. At that point, the direction of the objective function and the direction of the constraint are aligned.</p>
+<p>Mathematically, this relationship is written as</p>
+<p><span class="math display">\[
+\nabla U = \lambda \nabla g.
+\]</span></p>
+<p>Here, <span class="math inline">\(\lambda\)</span> is not another good or another choice. It is simply the proportionality factor that connects the objective function to the constraint at the optimum.</p>
+<p>This is what made <span class="math inline">\(\lambda\)</span> easier for me to understand: it does not create a new economic choice. It helps describe how the original objective and the original constraint fit together at the best feasible point.</p>
+</section>
+<section id="seeing-the-intuition-graphically" class="level2">
+<h2 class="anchored" data-anchor-id="seeing-the-intuition-graphically">Seeing the Intuition Graphically</h2>
+<p>The graphical view makes the idea easier to understand. Because of the budget constraint, the consumer cannot choose every possible combination of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. The goal is to reach the highest indifference curve that is still affordable.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="lagrange-intuition.png" class="img-fluid figure-img"></p>
+<figcaption>Utility maximization under a budget constraint. The optimal bundle occurs where the budget line is tangent to the highest attainable indifference curve.</figcaption>
+</figure>
 </div>
-</div>
+<p>At the optimal point, the budget line is tangent to the highest attainable indifference curve. This means that their slopes are equal:</p>
+<p><span class="math display">\[
+MRS=\frac{p_x}{p_y}.
+\]</span></p>
+<p>The MRS represents the consumer’s willingness to trade one good for another, while the price ratio represents the trade-off imposed by the market. At the optimum, these two trade-offs match.</p>
+</section>
+<section id="what-does-lambda-actually-mean" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-lambda-actually-mean">What Does <span class="math inline">\(\lambda\)</span> Actually Mean?</h2>
+<p>The Lagrange multiplier is more than a mathematical tool. It also tells us how valuable the constraint is.</p>
+<p>Suppose the consumer’s budget increases slightly, from $100 to $101. With the extra dollar, the consumer may be able to reach a slightly higher level of utility. The multiplier <span class="math inline">\(\lambda\)</span> measures how much the best possible outcome changes when the budget constraint is relaxed a little.</p>
+<p>In this sense, <span class="math inline">\(\lambda\)</span> is often called the <strong>shadow value</strong> or <strong>shadow price</strong> of the constraint. A larger <span class="math inline">\(\lambda\)</span> means that relaxing the constraint is more valuable, while a smaller <span class="math inline">\(\lambda\)</span> means that an additional unit of the resource has less effect.</p>
+<p>So <span class="math inline">\(\lambda\)</span> is not simply an extra symbol added to the equation. It tells us something economically meaningful about the value of having a little more of the limited resource.</p>
+</section>
+<section id="why-it-initially-feels-unintuitive" class="level2">
+<h2 class="anchored" data-anchor-id="why-it-initially-feels-unintuitive">Why It Initially Feels Unintuitive</h2>
+<p>Lagrange multipliers initially feel confusing because <span class="math inline">\(\lambda\)</span> looks like a new variable that suddenly appears in a problem that originally only involved <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. The key is that <span class="math inline">\(\lambda\)</span> does not represent another choice. Instead, it is connected to the constraint and helps describe how the objective and the constraint interact at the optimum.</p>
+<p>Once I stopped thinking of <span class="math inline">\(\lambda\)</span> as another variable like <span class="math inline">\(x\)</span> or <span class="math inline">\(y\)</span>, the method became much easier to understand. It is not adding a new economic decision; it is helping us solve the original problem under a limitation.</p>
+</section>
+<section id="takeaway" class="level2">
+<h2 class="anchored" data-anchor-id="takeaway">Takeaway</h2>
+<p>The Lagrange multiplier is not just a mathematical trick. It helps us solve an optimization problem when there is a constraint, and it also gives the constraint an economic meaning.</p>
+<p>The main idea I would remember is simple: <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the choices, while <span class="math inline">\(\lambda\)</span> tells us how important the constraint is and how valuable it would be to relax that constraint slightly.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -552,7 +668,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p><img src="./images/UniversityofPennsylvania_FullLogo_RGB.png" class="img-fluid" width="100"></p>
+<p><img src="../../../../images/UniversityofPennsylvania_FullLogo_RGB.png" class="img-fluid" width="100"></p>
 </div>   
     <div class="nav-footer-center">
 <p>© 2026 Yixuan Wang</p>

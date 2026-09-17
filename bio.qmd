@@ -1,0 +1,33 @@
+---
+title: "About Me"
+---
+
+I am a graduate student in Applied Economics and Data Science at the University of Pennsylvania. My academic background is in economics and statistics, and I am interested in applying data analysis to business and economic decision-making. My professional interests include strategy, business analytics, and data-driven decision-making.
+
+## Education
+
+Master of Applied Economics and Data Science, University of Pennsylvania (expected 2027)
+
+Bachelor of Arts in Economics, Boston University, 2026
+
+## Interests
+
+- Applied Economics
+- Data Analysis
+- Business Analytics
+- Strategy and Decision-Making
+
+## Technical Skills
+
+- R
+- Python
+- Statistical Analysis
+- Data Visualization
+
+## Career Goals
+
+I am interested in roles that combine economics, data analysis, and business strategy.
+
+## Contact
+
+## ywang818\@sas.upenn.edu
