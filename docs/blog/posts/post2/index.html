@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-06-16">
+<meta name="author" content="Yixuan Wang">
+<meta name="dcterms.date" content="2026-09-21">
 
-<title>My Second Blog Post – Yixuan Wang</title>
+<title>What Technical Skills Are Most Commonly Requested in Hacker News Job Postings? – Yixuan Wang</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,6 +24,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -126,10 +162,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">My Second Blog Post</h1>
+<h1 class="title">What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?</h1>
+<p class="subtitle lead">A web-scraping analysis of the September 2026 Hacker News hiring thread</p>
   <div class="quarto-categories">
-    <div class="quarto-category">opinion</div>
-    <div class="quarto-category">labor market</div>
+    <div class="quarto-category">Web Scraping</div>
+    <div class="quarto-category">Jobs</div>
+    <div class="quarto-category">Data Analysis</div>
   </div>
   </div>
 
@@ -137,11 +175,17 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yixuan Wang </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 16, 2026</p>
+      <p class="date">September 21, 2026</p>
     </div>
   </div>
   
@@ -153,8 +197,178 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="this-is-my-second-blog-post." class="level2">
-<h2 class="anchored" data-anchor-id="this-is-my-second-blog-post.">This is my second blog post.</h2>
+<section id="question-and-motivation" class="level2">
+<h2 class="anchored" data-anchor-id="question-and-motivation">Question and Motivation</h2>
+<p>Job seekers interested in technical roles often face a long list of skills to learn, including programming languages, databases, cloud platforms, and development tools. However, time and energy are limited, and it is difficult to develop every skill at once.</p>
+<p>This led me to look at real job postings and ask which technical skills appear most frequently in employers’ hiring posts. The results can help job seekers decide which skills may be worth prioritizing and where additional learning may be useful.</p>
+<p>They can also provide a practical benchmark for reviewing a resume. If certain technologies appear repeatedly across job postings but are missing from a job seeker’s current skill set or resume, those gaps may be worth examining more closely.</p>
+<p>This leads to my main question: <strong>What technical skills are most commonly requested in Hacker News job postings?</strong></p>
+</section>
+<section id="collecting-job-postings-from-hacker-news" class="level2">
+<h2 class="anchored" data-anchor-id="collecting-job-postings-from-hacker-news">Collecting Job Postings from Hacker News</h2>
+<p>For this analysis, I use the September 2026 Hacker News “Who is hiring?” thread. Companies use this thread to post open positions and describe relevant technical requirements.</p>
+<p>I use the <code>rvest</code> package in R to collect the publicly available text from these job postings. The page is publicly accessible and does not require a login, CAPTCHA, or paywall.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://news.ycombinator.com/item?id=49522897"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>comments <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"tr.comtr"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(comments)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 409</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>comment_text <span class="ot">&lt;-</span> comments <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">".commtext"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>indent_level <span class="ot">&lt;-</span> comments <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"td.ind"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"indent"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.integer</span>()</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>job_posts <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> comment_text,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">indent =</span> indent_level</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indent <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(job_posts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 268</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>job_posts <span class="ot">&lt;-</span> job_posts <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">text_lower =</span> <span class="fu">str_to_lower</span>(text)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="from-raw-job-posts-to-skill-mentions" class="level2">
+<h2 class="anchored" data-anchor-id="from-raw-job-posts-to-skill-mentions">From Raw Job Posts to Skill Mentions</h2>
+<p>The scraped job postings are unstructured text, so the next step is to identify whether each posting mentions specific technical skills.</p>
+<p>I focus on a set of commonly used technologies. Each skill is counted at most once within each job posting, even if it appears multiple times in the same post. This list is not intended to include every possible technical skill. Instead, it provides a consistent set of commonly used technologies that can be compared across postings.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>skill_patterns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Python =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bpython</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">SQL =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bsql</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">JavaScript =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bjavascript</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">TypeScript =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">btypescript</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">React =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">breact</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">AWS =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">baws</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">GCP =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bgcp</span><span class="sc">\\</span><span class="st">b|google cloud"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Azure =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bazure</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Docker =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bdocker</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Kubernetes =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bkubernetes</span><span class="sc">\\</span><span class="st">b|</span><span class="sc">\\</span><span class="st">bk8s</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Terraform =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bterraform</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">PostgreSQL =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bpostgresql</span><span class="sc">\\</span><span class="st">b|</span><span class="sc">\\</span><span class="st">bpostgres</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">PyTorch =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bpytorch</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rust =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">brust</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">Java =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bjava</span><span class="sc">\\</span><span class="st">b"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Go =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bgolang</span><span class="sc">\\</span><span class="st">b"</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>skill_counts <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">skill =</span> <span class="fu">names</span>(skill_patterns),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">count =</span> <span class="fu">sapply</span>(</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    skill_patterns,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(pattern) {</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_detect</span>(</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>          job_posts<span class="sc">$</span>text_lower,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>          <span class="fu">regex</span>(pattern, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count))</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>skill_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   skill      count
+   &lt;chr&gt;      &lt;int&gt;
+ 1 Python        71
+ 2 TypeScript    53
+ 3 React         53
+ 4 PostgreSQL    44
+ 5 AWS           34
+ 6 Kubernetes    26
+ 7 Rust          21
+ 8 Docker        20
+ 9 Terraform     16
+10 GCP           13
+11 SQL           12
+12 JavaScript    12
+13 Azure          8
+14 Java           8
+15 PyTorch        5
+16 Go             3</code></pre>
+</div>
+</div>
+</section>
+<section id="which-skills-appear-most-often" class="level2">
+<h2 class="anchored" data-anchor-id="which-skills-appear-most-often">Which Skills Appear Most Often?</h2>
+<p>After identifying the technical skills mentioned in each posting, I counted how many different job postings mentioned each technology. The figure below shows the ten most frequently mentioned skills in the sample.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>top_skills <span class="ot">&lt;-</span> skill_counts <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> count, <span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  top_skills,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">reorder</span>(skill, count),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> count</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Most Frequently Mentioned Technical Skills"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Hacker News Who is Hiring? — September 2026"</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Job Postings"</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Python was the most frequently mentioned skill, appearing in 71 job postings. TypeScript and React were tied for second place with 53 postings each, followed by PostgreSQL with 44 and AWS with 34.</p>
+<p>One clear pattern is that the most frequently mentioned technologies cover several different parts of the technical stack. Python represents general programming and data-related work, TypeScript and React are commonly associated with web development, PostgreSQL represents databases, and AWS represents cloud infrastructure.</p>
+<p>This suggests that employers in this Hacker News sample are not focused on only one type of technical skill. Instead, demand appears across programming, web development, databases, and cloud infrastructure.</p>
+</section>
+<section id="what-do-these-results-mean-for-job-seekers" class="level2">
+<h2 class="anchored" data-anchor-id="what-do-these-results-mean-for-job-seekers">What Do These Results Mean for Job Seekers?</h2>
+<p>TypeScript and React each appeared in 53 postings, while PostgreSQL and AWS were also relatively common.</p>
+<p>For job seekers with limited time, these results can provide a useful reference for deciding what to learn first. Whether someone is still a student or already working, preparing for a job search often requires using limited free time to build new skills. Knowing which technologies are more relevant to a target role can make this process more focused and manageable, instead of trying to learn many different tools at the same time.</p>
+<p>For example, someone interested in web development may want to pay more attention to TypeScript and React, while someone interested in backend or data-related roles may benefit from strengthening skills such as Python, PostgreSQL, and AWS.</p>
+<p>The results can also help job seekers review their resumes more critically. If a technology appears frequently in the types of jobs they are interested in but is completely missing from their resume or project experience, that may reveal a skill gap worth addressing through further learning or additional project work.</p>
+<p>However, a high frequency does not mean that a skill is the most important for every position. These results are better used as a reference for understanding which technologies appear often in this hiring sample and for identifying possible gaps in a job seeker’s current skill set, rather than as a universal ranking of technical skills. For people who are new to the job market, this type of analysis can also be a useful way to learn what different roles require and what abilities they may need to develop for the career path they want to pursue.</p>
+</section>
+<section id="limitations-and-takeaway" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-takeaway">Limitations and Takeaway</h2>
+<p>This analysis has several important limitations. First, Hacker News does not represent the entire job market. The “Who is hiring?” thread is likely to contain a relatively large share of technology companies, startups, and software-related positions. Therefore, the results should be interpreted as evidence from this specific hiring sample rather than as a description of all employers.</p>
+<p>Second, this analysis measures whether a technical skill is mentioned in a job posting. A mention does not necessarily mean that the skill is a strict job requirement. Some technologies may appear as part of a company’s existing technology stack, while others may be listed as preferred rather than required skills.</p>
+<p>The results also depend on the predefined skill list used in the analysis. Technologies that were not included in the list are not captured in the ranking.</p>
+<p>Even with these limitations, the analysis provides a useful way to turn unstructured job-posting text into information that can support real-world decisions. For job seekers, the main takeaway is not that one technology is always the “best,” but that frequently mentioned skills can provide a useful starting point for deciding what to learn, identifying gaps in a resume, and understanding the types of technical abilities that appear across this Hacker News hiring sample.</p>
 
 
 </section>

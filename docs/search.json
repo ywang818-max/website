@@ -53,7 +53,7 @@
     "href": "blog/index.html",
     "title": "Blog",
     "section": "",
-    "text": "Where Does λ Come From? Understanding Lagrange Multipliers Intuitively\n\n\nWhy an extra symbol appears in a problem that originally only had x and y\n\n\n\n\n\n\n\n\nSep 14, 2026\n\n\nYixuan Wang\n\n\n\n\n\n\n\n\n\n\n\n\nMy Second Blog Post\n\n\n\n\n\n\n\n\n\n\n\nJun 16, 2026\n\n\n\n\n\nNo matching items"
+    "text": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?\n\n\nA web-scraping analysis of the September 2026 Hacker News hiring thread\n\n\n\n\n\n\n\n\nSep 21, 2026\n\n\nYixuan Wang\n\n\n\n\n\n\n\n\n\n\n\n\nWhere Does λ Come From? Understanding Lagrange Multipliers Intuitively\n\n\nWhy an extra symbol appears in a problem that originally only had x and y\n\n\n\n\n\n\n\n\nSep 14, 2026\n\n\nYixuan Wang\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/posts/post1/index.html",
@@ -138,5 +138,54 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "blog/posts/post2/index.html",
+    "href": "blog/posts/post2/index.html",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "",
+    "text": "Job seekers interested in technical roles often face a long list of skills to learn, including programming languages, databases, cloud platforms, and development tools. However, time and energy are limited, and it is difficult to develop every skill at once.\nThis led me to look at real job postings and ask which technical skills appear most frequently in employers’ hiring posts. The results can help job seekers decide which skills may be worth prioritizing and where additional learning may be useful.\nThey can also provide a practical benchmark for reviewing a resume. If certain technologies appear repeatedly across job postings but are missing from a job seeker’s current skill set or resume, those gaps may be worth examining more closely.\nThis leads to my main question: What technical skills are most commonly requested in Hacker News job postings?"
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#question-and-motivation",
+    "href": "blog/posts/post2/index.html#question-and-motivation",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "",
+    "text": "Job seekers interested in technical roles often face a long list of skills to learn, including programming languages, databases, cloud platforms, and development tools. However, time and energy are limited, and it is difficult to develop every skill at once.\nThis led me to look at real job postings and ask which technical skills appear most frequently in employers’ hiring posts. The results can help job seekers decide which skills may be worth prioritizing and where additional learning may be useful.\nThey can also provide a practical benchmark for reviewing a resume. If certain technologies appear repeatedly across job postings but are missing from a job seeker’s current skill set or resume, those gaps may be worth examining more closely.\nThis leads to my main question: What technical skills are most commonly requested in Hacker News job postings?"
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#collecting-job-postings-from-hacker-news",
+    "href": "blog/posts/post2/index.html#collecting-job-postings-from-hacker-news",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "Collecting Job Postings from Hacker News",
+    "text": "Collecting Job Postings from Hacker News\nFor this analysis, I use the September 2026 Hacker News “Who is hiring?” thread. Companies use this thread to post open positions and describe relevant technical requirements.\nI use the rvest package in R to collect the publicly available text from these job postings. The page is publicly accessible and does not require a login, CAPTCHA, or paywall.\n\nlibrary(rvest)\nlibrary(dplyr)\nlibrary(stringr)\nlibrary(ggplot2)\n\nurl &lt;- \"https://news.ycombinator.com/item?id=49522897\"\n\npage &lt;- read_html(url)\n\n\ncomments &lt;- page |&gt;\n  html_elements(\"tr.comtr\")\n\nlength(comments)\n\n[1] 409\n\n\n\ncomment_text &lt;- comments |&gt;\n  html_element(\".commtext\") |&gt;\n  html_text2()\n\nindent_level &lt;- comments |&gt;\n  html_element(\"td.ind\") |&gt;\n  html_attr(\"indent\") |&gt;\n  as.integer()\n\njob_posts &lt;- tibble(\n  text = comment_text,\n  indent = indent_level\n) |&gt;\n  filter(indent == 0)\n\nnrow(job_posts)\n\n[1] 268\n\n\n\njob_posts &lt;- job_posts |&gt;\n  mutate(\n    text_lower = str_to_lower(text)\n  )"
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#from-raw-job-posts-to-skill-mentions",
+    "href": "blog/posts/post2/index.html#from-raw-job-posts-to-skill-mentions",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "From Raw Job Posts to Skill Mentions",
+    "text": "From Raw Job Posts to Skill Mentions\nThe scraped job postings are unstructured text, so the next step is to identify whether each posting mentions specific technical skills.\nI focus on a set of commonly used technologies. Each skill is counted at most once within each job posting, even if it appears multiple times in the same post. This list is not intended to include every possible technical skill. Instead, it provides a consistent set of commonly used technologies that can be compared across postings.\n\nskill_patterns &lt;- c(\n  Python = \"\\\\bpython\\\\b\",\n  SQL = \"\\\\bsql\\\\b\",\n  JavaScript = \"\\\\bjavascript\\\\b\",\n  TypeScript = \"\\\\btypescript\\\\b\",\n  React = \"\\\\breact\\\\b\",\n  AWS = \"\\\\baws\\\\b\",\n  GCP = \"\\\\bgcp\\\\b|google cloud\",\n  Azure = \"\\\\bazure\\\\b\",\n  Docker = \"\\\\bdocker\\\\b\",\n  Kubernetes = \"\\\\bkubernetes\\\\b|\\\\bk8s\\\\b\",\n  Terraform = \"\\\\bterraform\\\\b\",\n  PostgreSQL = \"\\\\bpostgresql\\\\b|\\\\bpostgres\\\\b\",\n  PyTorch = \"\\\\bpytorch\\\\b\",\n  Rust = \"\\\\brust\\\\b\",\n  Java = \"\\\\bjava\\\\b\",\n  Go = \"\\\\bgolang\\\\b\"\n)\n\nskill_counts &lt;- tibble(\n  skill = names(skill_patterns),\n  count = sapply(\n    skill_patterns,\n    function(pattern) {\n      sum(\n        str_detect(\n          job_posts$text_lower,\n          regex(pattern, ignore_case = TRUE)\n        ),\n        na.rm = TRUE\n      )\n    }\n  )\n) |&gt;\n  arrange(desc(count))\n\nskill_counts\n\n# A tibble: 16 × 2\n   skill      count\n   &lt;chr&gt;      &lt;int&gt;\n 1 Python        71\n 2 TypeScript    53\n 3 React         53\n 4 PostgreSQL    44\n 5 AWS           34\n 6 Kubernetes    26\n 7 Rust          21\n 8 Docker        20\n 9 Terraform     16\n10 GCP           13\n11 SQL           12\n12 JavaScript    12\n13 Azure          8\n14 Java           8\n15 PyTorch        5\n16 Go             3"
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#which-skills-appear-most-often",
+    "href": "blog/posts/post2/index.html#which-skills-appear-most-often",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "Which Skills Appear Most Often?",
+    "text": "Which Skills Appear Most Often?\nAfter identifying the technical skills mentioned in each posting, I counted how many different job postings mentioned each technology. The figure below shows the ten most frequently mentioned skills in the sample.\n\ntop_skills &lt;- skill_counts |&gt;\n  slice_max(order_by = count, n = 10)\n\nggplot(\n  top_skills,\n  aes(\n    x = reorder(skill, count),\n    y = count\n  )\n) +\n  geom_col() +\n  coord_flip() +\n  labs(\n    title = \"Most Frequently Mentioned Technical Skills\",\n    subtitle = \"Hacker News Who is Hiring? — September 2026\",\n    x = NULL,\n    y = \"Number of Job Postings\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nPython was the most frequently mentioned skill, appearing in 71 job postings. TypeScript and React were tied for second place with 53 postings each, followed by PostgreSQL with 44 and AWS with 34.\nOne clear pattern is that the most frequently mentioned technologies cover several different parts of the technical stack. Python represents general programming and data-related work, TypeScript and React are commonly associated with web development, PostgreSQL represents databases, and AWS represents cloud infrastructure.\nThis suggests that employers in this Hacker News sample are not focused on only one type of technical skill. Instead, demand appears across programming, web development, databases, and cloud infrastructure."
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#what-do-these-results-mean-for-job-seekers",
+    "href": "blog/posts/post2/index.html#what-do-these-results-mean-for-job-seekers",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "What Do These Results Mean for Job Seekers?",
+    "text": "What Do These Results Mean for Job Seekers?\nTypeScript and React each appeared in 53 postings, while PostgreSQL and AWS were also relatively common.\nFor job seekers with limited time, these results can provide a useful reference for deciding what to learn first. Whether someone is still a student or already working, preparing for a job search often requires using limited free time to build new skills. Knowing which technologies are more relevant to a target role can make this process more focused and manageable, instead of trying to learn many different tools at the same time.\nFor example, someone interested in web development may want to pay more attention to TypeScript and React, while someone interested in backend or data-related roles may benefit from strengthening skills such as Python, PostgreSQL, and AWS.\nThe results can also help job seekers review their resumes more critically. If a technology appears frequently in the types of jobs they are interested in but is completely missing from their resume or project experience, that may reveal a skill gap worth addressing through further learning or additional project work.\nHowever, a high frequency does not mean that a skill is the most important for every position. These results are better used as a reference for understanding which technologies appear often in this hiring sample and for identifying possible gaps in a job seeker’s current skill set, rather than as a universal ranking of technical skills. For people who are new to the job market, this type of analysis can also be a useful way to learn what different roles require and what abilities they may need to develop for the career path they want to pursue."
+  },
+  {
+    "objectID": "blog/posts/post2/index.html#limitations-and-takeaway",
+    "href": "blog/posts/post2/index.html#limitations-and-takeaway",
+    "title": "What Technical Skills Are Most Commonly Requested in Hacker News Job Postings?",
+    "section": "Limitations and Takeaway",
+    "text": "Limitations and Takeaway\nThis analysis has several important limitations. First, Hacker News does not represent the entire job market. The “Who is hiring?” thread is likely to contain a relatively large share of technology companies, startups, and software-related positions. Therefore, the results should be interpreted as evidence from this specific hiring sample rather than as a description of all employers.\nSecond, this analysis measures whether a technical skill is mentioned in a job posting. A mention does not necessarily mean that the skill is a strict job requirement. Some technologies may appear as part of a company’s existing technology stack, while others may be listed as preferred rather than required skills.\nThe results also depend on the predefined skill list used in the analysis. Technologies that were not included in the list are not captured in the ranking.\nEven with these limitations, the analysis provides a useful way to turn unstructured job-posting text into information that can support real-world decisions. For job seekers, the main takeaway is not that one technology is always the “best,” but that frequently mentioned skills can provide a useful starting point for deciding what to learn, identifying gaps in a resume, and understanding the types of technical abilities that appear across this Hacker News hiring sample."
   }
 ]
