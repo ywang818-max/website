@@ -47,6 +47,4 @@ The evidence answers the opening question with a qualified yes. Average private-
 - Overall hourly purchasing power was about 3.2% above the 2019 baseline.
 - Rent rose 35.7%, leaving wage purchasing power against rent slightly below its baseline.
 
-## Sources and replication
-
-U.S. Bureau of Labor Statistics, retrieved through FRED on October 6, 2026: [average hourly earnings](https://fred.stlouisfed.org/series/CES0500000003), [all-items CPI](https://fred.stlouisfed.org/series/CPIAUCSL), and [rent CPI](https://fred.stlouisfed.org/series/CUSR0000SEHA). See the [BLS explanation of rent measurement](https://www.bls.gov/cpi/factsheets/owners-equivalent-rent-and-rent.htm). [Code, data, figures, and replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post4) are available on GitHub. You can also [download the replication package](blog4-replication.zip).
+Source: U.S. Bureau of Labor Statistics via FRED, retrieved October 6, 2026. See [average hourly earnings](https://fred.stlouisfed.org/series/CES0500000003), [all-items CPI](https://fred.stlouisfed.org/series/CPIAUCSL), [rent CPI](https://fred.stlouisfed.org/series/CUSR0000SEHA), and [code, data, figures, and replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post4).
