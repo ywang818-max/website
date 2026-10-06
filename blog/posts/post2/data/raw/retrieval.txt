@@ -1,0 +1,4 @@
+Source: https://news.ycombinator.com/item?id=49522897
+Snapshot retrieved: October 6, 2026
+404 comment rows; 263 top-level rows; 253 nonempty top-level comments retained.
+Raw HTML is cached locally and excluded from Git; the public replication dataset contains comment IDs and binary technology indicators.

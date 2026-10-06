@@ -1,266 +1,44 @@
 ---
 title: "How Do Labor-Market Outcomes Vary by Education?"
-subtitle: "Evidence from the July 2026 IPUMS Current Population Survey"
+subtitle: "Three connected views of participation, employment, and unemployment in July 2026."
 author: "Yixuan Wang"
 date: "2026-09-28"
+date-modified: "2026-10-06"
 date-format: "MMMM D, YYYY"
 categories:
   - Data Analysis
+  - Labor Markets
+image: results/participation.png
 ---
-## Question and Motivation
 
-Education is often discussed as an important factor in labor-market outcomes, but the relationship can appear in several different ways. People with different levels of education may differ in whether they participate in the labor force, whether they are employed, and whether they experience unemployment.
+When people discuss education and employment, they often focus on the unemployment rate. But that statistic leaves out people who are neither working nor actively participating in the labor market. A group can have relatively low unemployment while many of its members remain outside the labor force. To understand the relationship between education and work, we need to ask a broader question: how do participation, employment, and unemployment differ across education levels?
 
-This analysis asks: **How do labor-market outcomes vary across education levels among working-age adults in the United States?**
+This matters because being employed and being unemployed are not the only possible outcomes for working-age adults. Some are studying, caring for family members, retired, or unable to work. Those situations have different implications from searching unsuccessfully for a job. Looking at all three measures helps distinguish a gap in labor-market participation from a gap in finding employment among participants.
 
-Using July 2026 IPUMS CPS Basic Monthly data, I compare adults ages 25–64 across four education groups. I focus on three outcomes: labor-force participation, employment, and unemployment. Looking at these outcomes together provides a broader picture of how educational attainment is associated with participation and employment in the U.S. labor market.
+I use the July 2026 Basic Monthly Current Population Survey obtained through [IPUMS CPS](https://cps.ipums.org/cps/). The analysis covers civilian adults ages 25–64 in four education groups, using the final basic person weight so estimates describe the population represented by the survey rather than treating every sampled person equally. The retained sample contains 44,881 respondents. These are one-month descriptive estimates, without seasonal adjustment.
 
-## Data and Setup
+![Weighted labor-force participation rates are 61.4%, 73.6%, 78.9%, and 85.6% across increasing education groups.](results/participation.png)
 
-I use July 2026 IPUMS CPS Basic Monthly data to examine labor-market outcomes by education. All population statistics in this analysis use the CPS final basic person weight, `WTFINL`.
+The first figure asks who is in the labor force: people who are employed or classified as unemployed. Participation rose from 61.4% among adults without a high school diploma to 73.6% among high school graduates, 78.9% among those with some college or an associate degree, and 85.6% among those with a bachelor's degree or higher. The difference between the first and last groups was 24.2 percentage points.
 
-```{r}
-#| message: false
-#| warning: false
+That is a substantial difference in attachment to the labor market, but participation alone does not tell us how many people actually have jobs. We therefore turn to employment, keeping the same population denominator.
 
-library(tidyverse)
+![Weighted employment-to-population ratios are 58.3%, 70.4%, 76.0%, and 83.0% across increasing education groups.](results/employment.png)
 
-cps <- read_csv("cps_00001.csv.gz", show_col_types = FALSE)
+The second figure shows the share of all adults in each group who were employed. It rose from 58.3% in the lowest education group to 70.4%, 76.0%, and 83.0% in the next three groups. The 24.7-percentage-point employment gap was close to the participation gap. This suggests that much of the employment difference reflects whether adults are in the labor force at all, rather than only whether participants have found a job.
 
-glimpse(cps)
-```
+To examine that remaining distinction, the third figure changes the denominator. The unemployment rate is the share unemployed among employed and unemployed adults, excluding people outside the labor force.
 
-## Cleaning the Data
+![Weighted unemployment rates among labor-force participants are 5.0%, 4.2%, 3.7%, and 3.1% across increasing education groups.](results/unemployment.png)
 
-I focus on adults ages 25 to 64 and group educational attainment into four broad categories.
+Unemployment fell from 5.0% among participants without a high school diploma to 4.2% for high school graduates, 3.7% for those with some college or an associate degree, and 3.1% for those with a bachelor's degree or higher. More-educated adults therefore had both higher participation and lower unemployment among participants. However, the 1.9-percentage-point unemployment gap was much smaller than the participation gap.
 
-```{r}
-cps_clean <- cps |>
-  filter(
-    AGE >= 25,
-    AGE <= 64,
-    EDUC99 != 0
-  ) |>
-  mutate(
-    education = case_when(
-      EDUC99 < 10 ~ "Less than high school",
-      EDUC99 == 10 ~ "High school",
-      EDUC99 >= 11 & EDUC99 <= 14 ~ "Some college / Associate",
-      EDUC99 >= 15 ~ "Bachelor's or higher"
-    ),
+The three figures fit together through a simple relationship: the employment share equals the participation rate multiplied by one minus the unemployment rate. For the lowest education group, $0.614\times(1-0.050)$ is approximately 0.583. Someone outside the labor force lowers the participation and employment shares but does not enter the unemployment-rate denominator. This is why unemployment alone cannot describe the full education gap in employment.
 
-    education = factor(
-      education,
-      levels = c(
-        "Less than high school",
-        "High school",
-        "Some college / Associate",
-        "Bachelor's or higher"
-      )
-    )
-  )
+These patterns do not establish that education caused the differences. Education groups can differ in age, health, family responsibilities, location, work experience, and other characteristics. The estimates also combine detailed education categories and describe one month, so they do not reveal long-run trends or whether small differences are statistically significant. The much larger descriptive gaps still show why a single headline unemployment rate gives an incomplete picture.
 
-cps_clean |>
-  count(education)
-```
+- Employment rose from 58.3% to 83.0% across the lowest and highest education groups.
+- The largest difference was in participation: whether adults were in the labor force at all.
+- Lower unemployment among more-educated participants reinforced that pattern, but the comparison is descriptive rather than causal.
 
-
-## Labor Force Participation by Education
-
-The first figure compares labor-force participation across education groups. Because the CPS is a weighted survey, I use the final basic person weight, `WTFINL`, so that the estimates represent the population rather than only the observations in the downloaded sample.
-
-```{r}
-lfp_by_education <- cps_clean |>
-  filter(LABFORCE %in% c(1, 2)) |>
-  group_by(education) |>
-  summarise(
-    labor_force_participation =
-      weighted.mean(LABFORCE == 2, WTFINL, na.rm = TRUE)
-  )
-
-lfp_by_education
-```
-
-```{r}
-ggplot(
-  lfp_by_education,
-  aes(
-    x = education,
-    y = labor_force_participation
-  )
-) +
-  geom_col() +
-  geom_text(
-    aes(
-      label = scales::percent(
-        labor_force_participation,
-        accuracy = 0.1
-      )
-    ),
-    vjust = -0.4
-  ) +
-  scale_y_continuous(
-    labels = scales::percent,
-    limits = c(0, 1)
-  ) +
-  labs(
-    title = "Labor Force Participation Rises with Education",
-    subtitle = "Adults ages 25–64, July 2026 CPS",
-    x = NULL,
-    y = "Labor Force Participation Rate",
-    caption = "Source: IPUMS CPS. Estimates weighted using WTFINL."
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(
-      angle = 20,
-      hjust = 1
-    )
-  )
-```
-
-The results show a clear positive relationship between educational attainment and labor-force participation. Among adults ages 25–64, the weighted labor-force participation rate is 61.4% for those with less than a high school education, compared with 73.6% for high school graduates, 78.9% for those with some college or an associate degree, and 85.6% for those with a bachelor's degree or higher.
-
-The difference between the lowest and highest education groups is about 24 percentage points. This suggests that people with more education are substantially more likely to participate in the labor market in this July 2026 CPS sample. However, this descriptive comparison does not establish that education itself causes the difference.
-
-## Employment by Education
-
-The second figure examines whether the same pattern appears when the outcome is employment rather than labor-force participation.
-
-```{r}
-employment_by_education <- cps_clean |>
-  filter(EMPSTAT != 0) |>
-  mutate(
-    emp_group = EMPSTAT %/% 10
-  ) |>
-  group_by(education) |>
-  summarise(
-    employment_rate =
-      weighted.mean(emp_group == 1, WTFINL, na.rm = TRUE)
-  )
-
-employment_by_education
-```
-
-```{r}
-ggplot(
-  employment_by_education,
-  aes(
-    x = education,
-    y = employment_rate
-  )
-) +
-  geom_col() +
-  geom_text(
-    aes(
-      label = scales::percent(
-        employment_rate,
-        accuracy = 0.1
-      )
-    ),
-    vjust = -0.4
-  ) +
-  scale_y_continuous(
-    labels = scales::percent,
-    limits = c(0, 1)
-  ) +
-  labs(
-    title = "Employment Rates Are Higher Among More-Educated Adults",
-    subtitle = "Adults ages 25–64, July 2026 CPS",
-    x = NULL,
-    y = "Employment Rate",
-    caption = "Source: IPUMS CPS. Estimates weighted using WTFINL."
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(
-      angle = 20,
-      hjust = 1
-    )
-  )
-```
-
-The employment-rate results show a similar pattern to labor-force participation. Among adults ages 25–64, the weighted employment rate increases from 58.3% for those with less than a high school education to 83.0% for those with a bachelor's degree or higher.
-
-The pattern is also monotonic across the four education groups: 70.4% of high school graduates and 76.0% of adults with some college or an associate degree are employed. This suggests that higher educational attainment is associated with stronger employment outcomes in this July 2026 CPS sample. As with the previous figure, these descriptive results show an association rather than a causal effect of education.
-
-## Unemployment by Education
-
-The third figure focuses only on people who are in the labor force and compares unemployment rates across education groups. The unemployment rate is calculated as the weighted share of unemployed people among all employed and unemployed workers.
-
-```{r}
-unemployment_by_education <- cps_clean |>
-  mutate(
-    emp_group = EMPSTAT %/% 10
-  ) |>
-  filter(emp_group %in% c(1, 2)) |>
-  group_by(education) |>
-  summarise(
-    unemployment_rate =
-      weighted.mean(emp_group == 2, WTFINL, na.rm = TRUE)
-  )
-
-unemployment_by_education
-```
-
-```{r}
-ggplot(
-  unemployment_by_education,
-  aes(
-    x = education,
-    y = unemployment_rate
-  )
-) +
-  geom_col() +
-  geom_text(
-    aes(
-      label = scales::percent(
-        unemployment_rate,
-        accuracy = 0.1
-      )
-    ),
-    vjust = -0.4
-  ) +
-  scale_y_continuous(
-    labels = scales::percent,
-    limits = c(0, 0.08)
-  ) +
-  labs(
-    title = "Unemployment Rates Decline with Education",
-    subtitle = "Adults ages 25–64 in the labor force, July 2026 CPS",
-    x = NULL,
-    y = "Unemployment Rate",
-    caption = "Source: IPUMS CPS. Estimates weighted using WTFINL."
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(
-      angle = 20,
-      hjust = 1
-    )
-  )
-```
-
-The unemployment-rate results provide a third piece of evidence about labor-market outcomes across education groups. Among adults ages 25–64 who are in the labor force, the weighted unemployment rate falls as educational attainment increases.
-
-The unemployment rate is about 5.0% among adults with less than a high school education, compared with 4.2% for high school graduates, 3.7% for those with some college or an associate degree, and 3.1% for those with a bachelor's degree or higher.
-
-Together with the previous two figures, this suggests that higher educational attainment is associated not only with greater participation in the labor market, but also with a greater likelihood of being employed and a lower likelihood of unemployment among labor-force participants.
-
-## What Do These Results Tell Us?
-
-The three figures tell a consistent story about education and labor-market outcomes in the July 2026 CPS. Among adults ages 25–64, people with higher levels of education have higher labor-force participation rates and higher employment rates. At the same time, unemployment rates among labor-force participants decline as education increases.
-
-The largest differences appear between adults with less than a high school education and adults with a bachelor's degree or higher. Labor-force participation rises from 61.4% to 85.6%, while the employment rate rises from 58.3% to 83.0%. The unemployment rate moves in the opposite direction, falling from about 5.0% to 3.1%.
-
-For someone thinking about education and the labor market, these descriptive patterns suggest that additional education is associated with stronger labor-market attachment. More-educated adults are more likely to participate in the labor force, more likely to be employed, and less likely to be unemployed once they are in the labor force.
-
-## Limitations
-
-These results are descriptive rather than causal. The analysis shows a relationship between educational attainment and labor-market outcomes, but it does not prove that additional education by itself causes higher employment or lower unemployment.
-
-Other factors may differ across education groups, including age, occupation, work experience, location, industry, and individual characteristics. This analysis also uses only the July 2026 CPS Basic Monthly sample, so it describes labor-market conditions at one point in time rather than long-run changes.
-
-In addition, the education categories used here combine several detailed levels of educational attainment into four broader groups. This makes the figures easier to interpret, but it also hides some differences within each category.
-
-Even with these limitations, the CPS provides a useful nationally representative snapshot of how labor-market outcomes vary across education groups when the appropriate sampling weights are used.
+Source: IPUMS CPS, University of Minnesota, July 2026 Basic Monthly sample. See [weight documentation](https://cps.ipums.org/cps-action/variables/WTFINL) and [code, aggregate results, and replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post3).

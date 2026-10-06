@@ -1,0 +1,28 @@
+# Run from post3: Rscript code/analyze.R [path/to/cps.csv.gz]
+suppressPackageStartupMessages({library(dplyr);library(readr);library(ggplot2);library(scales)})
+allargs <- commandArgs(trailingOnly=FALSE)
+script <- sub('^--file=','',allargs[grepl('^--file=',allargs)][1])
+script <- gsub('~+~',' ',script,fixed=TRUE)
+root <- dirname(dirname(normalizePath(script)))
+args <- commandArgs(trailingOnly=TRUE)
+input <- if(length(args)) args[1] else file.path(root,'cps_00001.csv.gz')
+if(!file.exists(input)) stop('Obtain the July 2026 IPUMS CPS extract described in README.md, then provide its local path.')
+out <- file.path(root,'results');dir.create(out,showWarnings=FALSE,recursive=TRUE)
+cps <- read_csv(input,show_col_types=FALSE)
+required <- c('YEAR','MONTH','AGE','EDUC99','EMPSTAT','LABFORCE','WTFINL')
+stopifnot(all(required %in% names(cps)))
+labels <- c('Less than high school','High school','Some college / Associate',"Bachelor's or higher")
+d <- cps |> filter(YEAR==2026,MONTH==7,between(AGE,25,64),EDUC99 %in% c(1,4:11,13:18),EMPSTAT %in% c(10,12,21,22,32,34,36),LABFORCE %in% c(1,2),is.finite(WTFINL),WTFINL>0) |>
+ mutate(education=case_when(EDUC99<10~labels[1],EDUC99==10~labels[2],EDUC99 %in% c(11,13,14)~labels[3],EDUC99 %in% 15:18~labels[4]),education=factor(education,levels=labels),employed=EMPSTAT %in% c(10,12),unemployed=EMPSTAT %in% c(21,22),in_labor_force=LABFORCE==2)
+stopifnot(all(d$in_labor_force==(d$employed|d$unemployed)))
+r <- d |> group_by(education) |> summarise(unweighted_n=n(),population_weight=sum(WTFINL),labor_force_weight=sum(WTFINL[in_labor_force]),labor_force_participation=sum(WTFINL[in_labor_force])/sum(WTFINL),employment_rate=sum(WTFINL[employed])/sum(WTFINL),unemployment_rate=sum(WTFINL[unemployed])/sum(WTFINL[in_labor_force]),.groups='drop')
+stopifnot(all(abs(r$employment_rate-r$labor_force_participation*(1-r$unemployment_rate))<1e-10))
+write_csv(r,file.path(out,'education_rates.csv'));writeLines(capture.output(sessionInfo()),file.path(out,'session-info.txt'))
+plot_rate <- function(var,title,subtitle,file,upper){
+ p <- ggplot(r,aes(x=education,y=.data[[var]]))+geom_col(fill='#155ab6',width=.6)+geom_text(aes(label=percent(.data[[var]],accuracy=.1)),hjust=-.15,size=4)+coord_flip()+scale_y_continuous(labels=label_percent(),limits=c(0,upper),expand=expansion(mult=c(0,0)))+scale_x_discrete(limits=rev(labels))+labs(title=title,subtitle=subtitle,x=NULL,y='Weighted share',caption='Source: IPUMS CPS, July 2026. Adults ages 25–64. Final Basic Weight (WTFINL).')+theme_minimal(base_size=12)+theme(panel.grid.major.y=element_blank(),plot.title=element_text(face='bold'),plot.caption=element_text(hjust=0))
+ ggsave(file.path(out,file),p,width=9,height=4.8,dpi=180)
+}
+plot_rate('labor_force_participation','More-educated adults are more likely to enter the labor force','Denominator: all adults in each education group','participation.png',1)
+plot_rate('employment_rate','The participation gap carries through to employment','Denominator: all adults in each education group','employment.png',1)
+plot_rate('unemployment_rate','Unemployment is lower among more-educated labor-force participants','Denominator: employed plus unemployed adults in each group','unemployment.png',.065)
+print(r)
