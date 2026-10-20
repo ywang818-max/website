@@ -1,48 +1,115 @@
-# Blog 2: Technical skill mentions in Hacker News hiring posts
+# Blog 2 — Reproduce the Hacker News skills analysis
 
-## Question and source
+**Article:** [Which Technical Skills Should Job Seekers Prioritize?](https://ywang818-max.github.io/website/blog/posts/post2/)
 
-Which technologies appear frequently in the September 2026 HN hiring thread, and how can job seekers use this to investigate learning priorities?
+This folder is the complete Blog 2 project inside the website repository. The default command reproduces the article's **October 6, 2026 snapshot offline**, including its chart and tables. It does not scrape a new page or require pre-existing results.
 
-Source: https://news.ycombinator.com/item?id=49522897
-Snapshot: October 6, 2026. The page had 404 comment rows, including 263 top-level rows. Excluding missing/empty text and duplicate IDs leaves 253 analyzed posts. Replies are excluded. A top-level comment may cover multiple positions; it is not a count of individual vacancies or verified mandatory requirements.
+## 1. Download and open the project
 
-## Files
-
-- `index.qmd`: readable article, without executable code or printed data.
-- `code/analyze.R`: rvest scraping, comment filtering, keyword matching, summaries, and saved chart.
-- `data/raw/retrieval.txt`: source and snapshot provenance.
-- `data/raw/thread.html`: local HTML cache, excluded from Git by `.gitignore`.
-- `data/processed/skill_mentions.csv`: frozen public replication dataset with one row per comment ID and one binary indicator per predefined technology. No full posting text or contact information is included.
-- `results/skill_counts.csv`, `results/sample_summary.csv`: aggregate counts, shares, and two co-mention totals.
-- `results/skill_mentions.png`: saved substantive chart.
-- `results/session-info.txt`: R/package versions used.
-
-## Reproduction
-
-Requires R and `rvest`, `dplyr`, `stringr`, `ggplot2`, `readr`, `scales`, and `xml2`.
-
-```r
-install.packages(c('rvest','dplyr','stringr','ggplot2','readr','scales','xml2'))
-```
-
-From the website repository root:
+Download the website repository with GitHub's **Code → Download ZIP**, then unzip it. Alternatively:
 
 ```sh
-cd blog/posts/post2
+git clone https://github.com/ywang818-max/website.git
+```
+
+The extracted folder may be named `website-main`; a Git clone is normally named `website`. Keep the folder structure below intact. You do not need to move files into your Downloads folder or change any paths inside the R code.
+
+## 2. Run from the website's root folder
+
+Install R 4.1 or newer. Open a **Terminal** in the extracted website folder (RStudio's Terminal tab also works). These are terminal commands, not commands to paste into the R Console:
+
+```sh
+Rscript blog/posts/post2/code/install_packages.R
+Rscript blog/posts/post2/code/analyze.R
+```
+
+The first command installs missing packages; it requires internet access only when packages are missing. The second uses the committed snapshot and works offline. R, installed packages, and the input files must be available.
+
+If your terminal is already inside `blog/posts/post2`, use:
+
+```sh
+Rscript code/install_packages.R
 Rscript code/analyze.R
 ```
 
-When local raw HTML exists, the script reconstructs indicators with rvest. In a fresh clone without HTML, it uses the frozen indicators to reproduce the October 6 results offline. To collect a new snapshot with rvest:
+Both commands identify the project folder from the script's own location. Spaces in folder names are supported. You can also run an absolute script path from any directory; quote paths containing spaces:
 
 ```sh
-Rscript code/analyze.R --download
+Rscript "/your/path/to/website/blog/posts/post2/code/analyze.R"
 ```
 
-The live thread changes, so a new download can change counts. Labels currently document the October 6 snapshot; update the chart, article, and provenance together if refreshing later. Each technology is counted at most once per post; shares use the same denominator of 253. Co-mentions are intersections of the two binary indicators. The top ten are selected deterministically by count and then alphabetically. The conservative Go pattern matches only 'golang'; SQL and JavaScript counts likewise do not automatically include every related database or framework name.
+Replace only the example path with your actual location. Do not edit the script's paths.
 
-## Access practices
+## 3. Check the outputs
 
-The source page is public and its robots.txt does not disallow the item URL; it specifies a 30-second crawl delay. The download mode waits 30 seconds and makes one request, caches the response, and avoids parallel fetching. It does not access login, vote, reply, or other disallowed routes and does not bypass authentication, CAPTCHAs, paywalls, or rate limits. Stop if the server denies access. Cached/offline analysis makes no web requests. Robots reference: https://news.ycombinator.com/robots.txt
+The script creates `results/` automatically, even if the folder has been removed. All output paths below are relative to **`blog/posts/post2/`**:
 
-The predefined keyword list is in the script. These indicators measure text mentions, not requirements, worker demand, proficiency, job placement, or salary effects. This recruiting channel is not representative of the whole labor market.
+| Output | What it contains |
+| --- | --- |
+| `results/skill_counts.csv` | All 16 skills: number of posts and share of analyzed posts |
+| `results/sample_summary.csv` | Sample size and two co-mention totals |
+| `results/skill_mentions.png` | The article's top-ten chart, saved by `ggsave()` |
+| `results/session-info.txt` | R and package versions used for this run |
+
+Expected default results:
+
+| Check | Expected result |
+| --- | --- |
+| Analyzed nonempty top-level posts | 253 |
+| Python | 68 posts; 26.9% |
+| React | 51 posts; 20.2% |
+| TypeScript | 51 posts; 20.2% |
+| PostgreSQL | 40 posts; 15.8% |
+| AWS | 34 posts; 13.4% |
+| Python and PostgreSQL together | 20 posts |
+| TypeScript and React together | 34 posts |
+
+These numbers are calculated from the committed indicator data, not copied into the output tables. Older/newer graphics packages or fonts may render the same figure slightly differently; the tabular counts are the comparison standard. See `REPRODUCTION_CHECK.md` for the clean-copy verification performed for this revision.
+
+## Folder map: inputs → code → outputs
+
+```text
+blog/posts/post2/
+├── README.md                       # Start here
+├── REPRODUCTION_CHECK.md           # Clean-copy verification evidence
+├── index.qmd                       # Blog article; references the saved PNG
+├── code/
+│   ├── install_packages.R          # Install missing R dependencies
+│   └── analyze.R                   # Snapshot analysis + optional rvest refresh
+├── data/
+│   ├── processed/
+│   │   └── skill_mentions.csv      # Fixed INPUT: comment ID + 16 binary indicators
+│   ├── snapshot_metadata.csv        # Fixed INPUT: original collection metadata
+│   ├── snapshot_checksums.csv      # Verifies fixed inputs have not changed
+│   └── raw/
+│       └── retrieval.txt           # Original source and collection date
+└── results/                        # GENERATED by analyze.R; never an input
+    ├── skill_counts.csv
+    ├── sample_summary.csv
+    ├── skill_mentions.png
+    └── session-info.txt
+```
+
+The website repository's `docs/blog/posts/post2/index.html` is the rendered web page, not the analysis input. To update the website after changing article content, run `quarto render blog/posts/post2/index.qmd` from the website root. Quarto is not required to reproduce the analysis.
+
+## Optional: collect a new page using rvest
+
+The submitted snapshot is fixed because comments can be added or removed from the live thread. To demonstrate or rerun the scraping stage explicitly:
+
+```sh
+Rscript blog/posts/post2/code/analyze.R --refresh
+```
+
+This waits 30 seconds, makes one request with **`rvest::read_html()`**, retains nonempty top-level comments, excludes duplicate comment IDs and replies, matches the predefined skill patterns, and saves a new analysis. It stops if the response is not the expected hiring page or contains no usable posts. It does not bypass access restrictions or automatically retry denied requests.
+
+New raw HTML, indicators, and retrieval metadata go to **`data/refresh/`**. New tables, chart, and session information go to **`results/refresh/`**. Both refresh folders are excluded from Git. Refresh mode does **not** overwrite the submitted inputs, default outputs, or the article. Its chart uses the actual new collection date. To revise the article to a new snapshot, inspect those outputs first and update the article, input snapshot, metadata, and checksums together.
+
+The full original HTML is cached only on the author's computer. It is not needed by default and is not available in a fresh clone. The public indicators permit exact numerical reproduction of the October 6 results; the scraping code permits a new collection, which may differ. This separates reproduction of submitted results from recollection of a changing source.
+
+## Source, definitions, and limitations
+
+Source: [September 2026 HN “Who is hiring?”](https://news.ycombinator.com/item?id=49522897). Retrieved October 6, 2026: 404 comment rows, 263 top-level rows, and 253 nonempty distinct top-level posts after filtering. A post can cover more than one vacancy. Each skill is counted at most once per post; shares use 253 posts as the denominator. Co-mentions require both indicators to equal 1. Top-ten ties are ordered alphabetically.
+
+Indicators measure mentions, not mandatory requirements, proficiency, salaries, or hiring success. The list is predefined; Go matches conservatively through “golang,” and framework/database synonyms are not automatically added to language counts. This recruiting channel is not representative of the whole job market.
+
+Access: the source page is public. [HN robots.txt](https://news.ycombinator.com/robots.txt) specified a 30-second crawl delay at collection and did not disallow this item URL. Refresh mode makes one delayed request, with no login, parallel scraping, or bypasses. Check the current access rules before a later refresh. Default reproduction makes no source-page requests.
