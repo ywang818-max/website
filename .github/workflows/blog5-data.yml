@@ -1,0 +1,30 @@
+name: Blog 5 official data acquisition
+on:
+  push:
+    branches: [blog5-rental-affordability]
+    paths:
+      - blog/posts/post5/code/acquire_data.py
+      - .github/workflows/blog5-data.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: blog5-rental-affordability
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download and validate public Census inputs
+        run: python blog/posts/post5/code/acquire_data.py
+      - name: Preserve the reviewed-input snapshot on the working branch
+        run: |
+          git add blog/posts/post5/data/raw
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Archive official Census inputs for Blog 5'
+            git push origin HEAD:blog5-rental-affordability
+          fi
