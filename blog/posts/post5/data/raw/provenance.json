@@ -1,0 +1,20 @@
+{
+  "retrieved_utc": "2026-10-20T02:45:04.949487+00:00",
+  "acs_period": "2020-2024",
+  "money_units": "2024 inflation-adjusted dollars",
+  "boundary_service": "Census TIGERweb current county layer",
+  "projection": "EPSG:5070, NAD83 / Conus Albers",
+  "geometry_simplification": "250 metres; presentation only",
+  "sources": {
+    "acs_reporter.json": {
+      "url": "https://api.censusreporter.org/1.0/data/show/acs2024_5yr?table_ids=B25064%2CB25119%2CB25070&geo_ids=050%7C04000US42%2C04000US42",
+      "sha256": "8516df11de9c2bf8880dfa17c6298b9a5ccfbf7ece7caa88fbe01cfd57fca017",
+      "bytes": 52141
+    },
+    "pa_counties_5070.json": {
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1/query?where=STATE%3D%2742%27&outFields=GEOID%2CNAME%2CSTATE%2CCOUNTY&returnGeometry=true&outSR=5070&geometryPrecision=0&maxAllowableOffset=250&f=json",
+      "sha256": "7074fe73d304a86ecd56dc6649ccec3d4a8a75fe3a8aa9842ab0e990f97218e6",
+      "bytes": 73822
+    }
+  }
+}
