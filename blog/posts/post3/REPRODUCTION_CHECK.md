@@ -1,0 +1,25 @@
+# Blog 3 verification — October 19, 2026
+
+## Feedback addressed
+
+- Repository organization: the repository homepage now links directly to this project's README. That README contains the code/data/results tree, exact commands from both repository root and post3, dependency installation, all output names, and expected numeric results.
+- Reproducibility/coding practices: all paths derive from the script location, input checksums are checked, results are generated/saved by code, and a fresh public clone no longer needs an uncommitted microdata file to reproduce the displayed analysis.
+- Analytical extension: a fourth weighted visualization and two supporting CSV tables distinguish inability to work, retirement, and other nonparticipation. EMPSTAT mappings were checked against IPUMS documentation. The article explicitly states that the current extract cannot identify caregiving separately and that arithmetic contributions are not causal mechanisms.
+
+## Checks performed
+
+1. Copied code and public aggregate inputs into a clean directory without any results or microdata. Ran the script from an unrelated working directory using an absolute path containing spaces. All nine expected outputs were generated, including four PNG charts.
+2. Ran `--microdata` against the author's original July 2026 local IPUMS extract. All four CSV tables matched the aggregate-input outputs to a numeric tolerance of 1e-12.
+3. Compared the revised education rates with the existing article's original rate table: the three original outcomes and all four sample sizes were unchanged.
+4. Independently recomputed participation rates and all 12 education/status weighted population shares directly from the person-level file, outside the aggregation helper. They matched the reported tables within 1e-12.
+5. Checked employment = participation × (1 − unemployment); the three status shares sum to nonparticipation; and lowest-versus-highest status differences sum to the overall participation gap.
+6. Inspected the new chart for labels, percentages, denominator clarity, and visible marks. Rebuilt the article body from its Markdown source using bundled Pandoc while retaining the existing compiled Quarto navigation/style shell, updated the modification date/search index, and checked all four local image references. Standard Quarto rendering remains documented for normal environments; the local full Quarto command was unavailable because its global Sass cache directory was not writable.
+7. No individual-level CPS records or identifiers were added to the public project. Only 28 education/employment-status aggregate cells, source metadata/checksums, code, tables, and figures are shared.
+
+R/package versions for the run are in `results/session-info.txt`. IPUMS source, weighting, code definitions and raw-data access instructions are linked in README.md and data/raw/README.md.
+
+## Interpretation bounds
+
+The results are one-month descriptive estimates. No causal effect or statistical significance is claimed. The inability-to-work difference contributes about 12.82 of 24.24 percentage points in the participation gap; this is accounting, not evidence that schooling would remove that barrier. The broad EMPSTAT=34 category cannot be treated as caregiving. Further caregiving analysis requires an authorized extract with NILFACT and its correct universe.
+
+These checks document the revision, not a promise of a particular regraded score.
