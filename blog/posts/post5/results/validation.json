@@ -1,0 +1,9 @@
+{
+  "source_hashes": "pass",
+  "unique_counties": 67,
+  "geometry_join": "67 of 67; one-to-one",
+  "category_totals": "pass",
+  "county_counts_reconcile_to_state": "pass",
+  "missing_or_nonpositive_medians": 0,
+  "offline": true
+}
