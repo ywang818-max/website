@@ -14,7 +14,10 @@ def download(url):
     req = Request(url, headers={'User-Agent':'Blog5EducationalAnalysis/1.0'})
     with urlopen(req, timeout=90) as response:
         data = response.read()
-    value = json.loads(data)
+    try:
+        value = json.loads(data)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Non-JSON response from {url}: {data[:1200]!r}") from exc
     if isinstance(value, dict) and 'error' in value:
         raise ValueError(value['error'])
     return value
