@@ -1,4 +1,4 @@
-"""Download the exact public Census inputs used by Blog 5. No key is required."""
+"""Archive ACS estimates via Census Reporter and official TIGERweb boundaries."""
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
@@ -25,17 +25,15 @@ def download(url):
 def main():
     RAW.mkdir(parents=True, exist_ok=True)
     queries = {
-        'acs_counties.json': BASE+'?'+urlencode({'get':','.join(VARIABLES),'for':'county:*','in':'state:42'}),
-        'acs_state.json': BASE+'?'+urlencode({'get':','.join(VARIABLES),'for':'state:42'}),
+        'acs_reporter.json': 'https://api.censusreporter.org/1.0/data/show/acs2024_5yr?'+urlencode({'table_ids':'B25064,B25119,B25070','geo_ids':'050|04000US42,04000US42'}),
         'pa_counties_5070.json': GEO+'?'+urlencode({'where':"STATE='42'",'outFields':'GEOID,NAME,STATE,COUNTY','returnGeometry':'true','outSR':'5070','geometryPrecision':'0','maxAllowableOffset':'250','f':'json'})
     }
     sources = {}
     for filename, url in queries.items():
         value = download(url)
-        if filename=='acs_counties.json':
-            assert len(value)==68, f'Expected 67 counties: {len(value)-1}'
-        elif filename=='acs_state.json':
-            assert len(value)==2, 'Expected one statewide record'
+        if filename=='acs_reporter.json':
+            assert len(value['data'])==68, 'Expected 67 counties plus state'
+            assert value['release']['id']=='acs2024_5yr', value['release']
         else:
             assert len(value.get('features',[]))==67, 'Expected 67 county geometries'
             assert not value.get('exceededTransferLimit'), 'Incomplete boundary query'
