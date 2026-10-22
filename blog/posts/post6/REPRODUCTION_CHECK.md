@@ -29,3 +29,10 @@ Added explicit Python-to-SQL execution and NumPy estimation examples, specified
 the working directory for the short command, explained complete-case selection,
 and distinguished the 0.574 average-child benchmark from the 0.601 single-child
 benchmark. Numerical findings and selection rules are unchanged.
+
+## October 22 tutorial prerequisite clarification
+
+Marked inline snippets as explanatory excerpts. Removed the misleading fresh
+empty connection from the SQL execution example and used the actual script's
+ROOT-based path. The complete CLI remains the runnable entry point; analysis
+code, input rules and all numerical results are unchanged.

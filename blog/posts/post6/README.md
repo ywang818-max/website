@@ -67,6 +67,10 @@ Run the analysis before rendering to regenerate figures. The deployed file is
 `docs/blog/posts/post6/index.html`; SVGs and the aggregate CSV are copied to that
 post's results directory. The site requires no access to private inputs.
 
+The article’s inline code blocks are explanatory excerpts. They depend on the
+connection, tables and `ROOT` variable created inside the full script; use the
+complete CLI command above for an end-to-end run.
+
 ## Matching and selection, explicitly
 
 1. Read the Stata `infix` positions directly; parse numeric fixed-width fields,

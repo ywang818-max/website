@@ -3,7 +3,7 @@ title: "How Do Labor-Market Outcomes Vary by Education?"
 subtitle: "Participation, employment, and the recorded reasons adults remain outside the labor force."
 author: "Yixuan Wang"
 date: "2026-09-28"
-date-modified: "2026-10-19"
+date-modified: "2026-10-22"
 date-format: "MMMM D, YYYY"
 categories:
   - Data Analysis
@@ -23,17 +23,15 @@ Figure 1 asks who is in the labor force: adults who are employed or classified a
 
 Participation includes unsuccessful job seekers, so the next step is to ask how many adults actually had jobs, using the same population denominator.
 
-![Figure 2. Weighted employment-to-population ratios: 58.3%, 70.4%, 76.0%, and 83.0% across increasing education groups.](results/employment.png)
-
 Employment rose from 58.3% in the lowest education group to 70.4%, 76.0%, and 83.0% in the next three groups. The 24.7-percentage-point employment gap was close to the participation gap. This points toward nonparticipation as a major part of the difference, rather than only difficulty finding work among participants.
 
-![Figure 3. Weighted unemployment rates among participants: 5.0%, 4.2%, 3.7%, and 3.1% across increasing education groups.](results/unemployment.png)
+![Figure 2. Weighted unemployment rates among participants: 5.0%, 4.2%, 3.7%, and 3.1% across increasing education groups.](results/unemployment.png)
 
-Figure 3 changes the denominator to employed plus unemployed adults. Unemployment fell from 5.0% in the lowest education group to 4.2%, 3.7%, and 3.1% as education increased. Its 1.9-percentage-point gap was much smaller than the participation gap. These figures are linked by an identity: employment share equals participation rate multiplied by one minus unemployment rate. Someone outside the labor force lowers participation and employment, but does not enter the unemployment denominator.
+Figure 2 changes the denominator to employed plus unemployed adults. Unemployment fell from 5.0% in the lowest education group to 4.2%, 3.7%, and 3.1% as education increased. Its 1.9-percentage-point gap was much smaller than the participation gap. These figures are linked by an identity: employment share equals participation rate multiplied by one minus unemployment rate. Someone outside the labor force lowers participation and employment, but does not enter the unemployment denominator.
 
-What, then, lies behind nonparticipation? The existing employment-status variable distinguishes “unable to work,” “retired,” and “other” among adults outside the labor force. Figure 4 separates these categories, keeping all adults in each education group as the denominator.
+What, then, lies behind nonparticipation? The existing employment-status variable distinguishes “unable to work,” “retired,” and “other” among adults outside the labor force. Figure 3 separates these categories, keeping all adults in each education group as the denominator.
 
-![Figure 4. Nonparticipation by recorded status. Each segment is a share of all adults in the education group, not only nonparticipants. Other NILF does not separately identify caregiving.](results/nonparticipation.png)
+![Figure 3. Nonparticipation by recorded status. Each segment is a share of all adults in the education group, not only nonparticipants. Other NILF does not separately identify caregiving.](results/nonparticipation.png)
 
 Among adults without a high school diploma, 14.2% were classified as unable to work, 5.3% as retired, and 19.1% as other nonparticipants. Among those with a bachelor's degree or higher, the corresponding shares were 1.4%, 5.0%, and 8.0%. These categories sum to nonparticipation rates of 38.6% and 14.4%.
 
@@ -47,4 +45,4 @@ The interpretation has limits. A recorded inability to work is not proof that ed
 
 ## Sources and replication
 
-Source: IPUMS CPS, University of Minnesota, July 2026 Basic Monthly sample. See [person-weight documentation](https://cps.ipums.org/cps-action/variables/WTFINL), [employment-status definitions](https://cps.ipums.org/cps-action/variables/EMPSTAT), and [activity-variable documentation](https://cps.ipums.org/cps-action/variables/NILFACT). [Code, aggregate data, and step-by-step replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post3) reproduce all four figures and tables; the README also explains how to rebuild them from an authorized IPUMS microdata extract.
+Source: IPUMS CPS, University of Minnesota, July 2026 Basic Monthly sample. See [person-weight documentation](https://cps.ipums.org/cps-action/variables/WTFINL), [employment-status definitions](https://cps.ipums.org/cps-action/variables/EMPSTAT), and [activity-variable documentation](https://cps.ipums.org/cps-action/variables/NILFACT). [Code, aggregate data, and step-by-step replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post3) reproduce the three article figures, supplementary employment chart, and tables; the README also explains how to rebuild them from an authorized IPUMS microdata extract.

@@ -2,7 +2,7 @@
 
 **Published article:** https://ywang818-max.github.io/website/blog/posts/post3/
 
-This project uses July 2026 IPUMS CPS Basic Monthly data for civilian adults ages 25–64. It produces four connected figures: participation, employment, unemployment, and nonparticipation status. Every population estimate uses the person weight **WTFINL**.
+This project uses July 2026 IPUMS CPS Basic Monthly data for civilian adults ages 25–64. The article uses three core figures: participation, unemployment, and nonparticipation status. Employment-to-population ratios remain in the prose; the script also saves a supplementary employment chart for inspection. Every population estimate uses the person weight **WTFINL**.
 
 ## Quick start: reproduce the published results offline
 
@@ -51,9 +51,9 @@ post3/
     ├── nonparticipation_status.csv        # Three NILF categories and denominators
     ├── participation_gap_accounting.csv   # Lowest vs highest education gap
     ├── participation.png                  # Figure 1
-    ├── employment.png                     # Figure 2
-    ├── unemployment.png                   # Figure 3
-    ├── nonparticipation.png               # Figure 4
+    ├── employment.png                     # Supplementary diagnostic
+    ├── unemployment.png                   # Figure 2
+    ├── nonparticipation.png               # Figure 3
     └── session-info.txt                   # Versions used for the run
 ```
 

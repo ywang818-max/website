@@ -3,6 +3,7 @@ title: "Does One Year Tell the Whole Income Story?"
 subtitle: "A Python and SQL tutorial for matching PSID parents and children."
 author: "Yixuan Wang"
 date: "2026-10-21"
+date-modified: "2026-10-22"
 date-format: "MMMM D, YYYY"
 categories: [Python, SQL, Economic Mobility]
 description: "Match generations with stable IDs, then see how income averaging and age at measurement change intergenerational elasticity."
@@ -18,7 +19,7 @@ Would a graduate student’s income today tell us where they will stand at forty
 
 The Panel Study of Income Dynamics (PSID) follows families and their descendants. I use a 261-variable, 85,536-person extract covering available interview waves from 1968 through 2023, plus a biological-parent FIMS mapping. The income measure is **family money income**, not individual earnings.
 
-Download your own authorized extract and keep the ASCII file, Stata reading statements, and codebook together. The repository’s Python script reads fixed-width positions from those statements; opening the file as a comma-separated CSV would misalign its fields. After installing the packages listed in the README, run this command from `blog/posts/post6`, using your local paths:
+Download your own authorized extract and keep the ASCII file, Stata reading statements, and codebook together. The repository’s Python script reads fixed-width positions from those statements; opening the file as a comma-separated CSV would misalign its fields. The code excerpts below explain parts of the full script; they are not a standalone sequence to paste into a new Python session. For the complete import, matching, estimation and exports, install the packages listed in the README and run this command from `blog/posts/post6`, using your local paths:
 
 ```bash
 python code/analyze.py --data /path/J366555.txt \
@@ -36,15 +37,11 @@ JOIN families AS f
 
 `SELECT` chooses columns; `JOIN` combines rows whose keys agree. Validate unique person–wave and family–wave keys first, then assert that this join preserves the membership row count. Otherwise, duplicate keys can silently multiply observations.
 
-The full importer creates these tables in Python. SQL then runs through the standard-library connection:
+The importer opens an in-memory SQLite connection, creates and populates the tables, and defines the `panel` view. Only **after those steps**, the following excerpt from `analyze.py` executes the SQL. Here `db` is that existing populated connection, and `ROOT` is the post directory defined by the script:
 
 ```python
-import sqlite3
-from pathlib import Path
-
-db = sqlite3.connect(":memory:")
-# Populate people, membership, families, and links with the importer first.
-db.executescript(Path("sql/match.sql").read_text())
+# Excerpt from analyze.py; run the full script for table creation and import.
+db.executescript((ROOT / "sql/match.sql").read_text())
 matched = db.execute("SELECT * FROM matched ORDER BY child_pid").fetchall()
 ```
 
@@ -72,7 +69,7 @@ In Python, estimate an intercept and slope in:
 
 $$\log(Y_{child})=\alpha+\beta\log(Y_{father})+\varepsilon.$$
 
-The slope is the intergenerational elasticity (IGE): approximately how much higher child income is associated with a 1% difference in father income. Larger values indicate stronger income persistence, not a causal effect of parental money. Given the SQL connection above, Python obtains the slope as follows:
+The slope is the intergenerational elasticity (IGE): approximately how much higher child income is associated with a 1% difference in father income. Larger values indicate stronger income persistence, not a causal effect of parental money. Continuing inside the same full-script workflow, after `matched` exists, Python obtains the slope as follows:
 
 ```python
 import numpy as np

@@ -185,9 +185,12 @@ money income</strong>, not individual earnings.</p>
 <p>Download your own authorized extract and keep the ASCII file, Stata
 reading statements, and codebook together. The repository’s Python
 script reads fixed-width positions from those statements; opening the
-file as a comma-separated CSV would misalign its fields. After
-installing the packages listed in the README, run this command from
-<code>blog/posts/post6</code>, using your local paths:</p>
+file as a comma-separated CSV would misalign its fields. The code
+excerpts below explain parts of the full script; they are not a
+standalone sequence to paste into a new Python session. For the complete
+import, matching, estimation and exports, install the packages listed in
+the README and run this command from <code>blog/posts/post6</code>,
+using your local paths:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/analyze.py <span class="at">--data</span> /path/J366555.txt <span class="dt">\</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--statements</span> /path/J366555.do <span class="at">--fims</span> /path/fim16218_gid_BO_2_UBL.txt</span></code></pre></div>
@@ -206,16 +209,16 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#c
 whose keys agree. Validate unique person–wave and family–wave keys
 first, then assert that this join preserves the membership row count.
 Otherwise, duplicate keys can silently multiply observations.</p>
-<p>The full importer creates these tables in Python. SQL then runs
-through the standard-library connection:</p>
+<p>The importer opens an in-memory SQLite connection, creates and
+populates the tables, and defines the <code>panel</code> view. Only
+<strong>after those steps</strong>, the following excerpt from
+<code>analyze.py</code> executes the SQL. Here <code>db</code> is that
+existing populated connection, and <code>ROOT</code> is the post
+directory defined by the script:</p>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&quot;:memory:&quot;</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Populate people, membership, families, and links with the importer first.</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>db.executescript(Path(<span class="st">&quot;sql/match.sql&quot;</span>).read_text())</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>matched <span class="op">=</span> db.execute(<span class="st">&quot;SELECT * FROM matched ORDER BY child_pid&quot;</span>).fetchall()</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Excerpt from analyze.py; run the full script for table creation and import.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>db.executescript((ROOT <span class="op">/</span> <span class="st">&quot;sql/match.sql&quot;</span>).read_text())</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>matched <span class="op">=</span> db.execute(<span class="st">&quot;SELECT * FROM matched ORDER BY child_pid&quot;</span>).fetchall()</span></code></pre></div>
 <h2 id="summarize-years-before-matching-generations">2. Summarize years
 before matching generations</h2>
 <p>Income generally refers to the calendar year before the interview. I
@@ -252,8 +255,9 @@ persistence</h2>
 <p>The slope is the intergenerational elasticity (IGE): approximately
 how much higher child income is associated with a 1% difference in
 father income. Larger values indicate stronger income persistence, not a
-causal effect of parental money. Given the SQL connection above, Python
-obtains the slope as follows:</p>
+causal effect of parental money. Continuing inside the same full-script
+workflow, after <code>matched</code> exists, Python obtains the slope as
+follows:</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -264,7 +268,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <p>The full script repeats this regression for each income definition
 and exports the estimates and confidence intervals.</p>
 <figure>
-<img src="results/figures/figure1.svg"
+<img class="img-fluid figure-img" src="results/figures/figure1.svg"
 alt="Figure 1. Single-year versus multi-year prime-age family-income estimates, using identical matched pairs." />
 <figcaption aria-hidden="true">Figure 1. Single-year versus multi-year
 prime-age family-income estimates, using identical matched
@@ -282,7 +286,7 @@ child income (<code>1.10**0.574 - 1</code>). These averages remain
 imperfect proxies for lifetime income.</p>
 <h2 id="check-age-separately">4. Check age separately</h2>
 <figure>
-<img src="results/figures/figure2.svg"
+<img class="img-fluid figure-img" src="results/figures/figure2.svg"
 alt="Figure 2. Early-adult versus prime-age child income, holding the father’s multi-year measure and the matched sample fixed." />
 <figcaption aria-hidden="true">Figure 2. Early-adult versus prime-age
 child income, holding the father’s multi-year measure and the matched
