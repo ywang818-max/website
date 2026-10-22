@@ -1,0 +1,3 @@
+data/private/
+*.db
+__pycache__/

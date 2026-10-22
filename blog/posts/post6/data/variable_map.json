@@ -1,0 +1,389 @@
+[
+  {
+    "wave": 1968,
+    "income_year": 1967,
+    "income": "V81",
+    "age": "ER30004",
+    "family_id": "ER30001",
+    "sequence": null,
+    "relationship": "ER30003"
+  },
+  {
+    "wave": 1969,
+    "income_year": 1968,
+    "income": "V529",
+    "age": "ER30023",
+    "family_id": "ER30020",
+    "sequence": "ER30021",
+    "relationship": "ER30022"
+  },
+  {
+    "wave": 1970,
+    "income_year": 1969,
+    "income": "V1514",
+    "age": "ER30046",
+    "family_id": "ER30043",
+    "sequence": "ER30044",
+    "relationship": "ER30045"
+  },
+  {
+    "wave": 1971,
+    "income_year": 1970,
+    "income": "V2226",
+    "age": "ER30070",
+    "family_id": "ER30067",
+    "sequence": "ER30068",
+    "relationship": "ER30069"
+  },
+  {
+    "wave": 1972,
+    "income_year": 1971,
+    "income": "V2852",
+    "age": "ER30094",
+    "family_id": "ER30091",
+    "sequence": "ER30092",
+    "relationship": "ER30093"
+  },
+  {
+    "wave": 1973,
+    "income_year": 1972,
+    "income": "V3256",
+    "age": "ER30120",
+    "family_id": "ER30117",
+    "sequence": "ER30118",
+    "relationship": "ER30119"
+  },
+  {
+    "wave": 1974,
+    "income_year": 1973,
+    "income": "V3676",
+    "age": "ER30141",
+    "family_id": "ER30138",
+    "sequence": "ER30139",
+    "relationship": "ER30140"
+  },
+  {
+    "wave": 1975,
+    "income_year": 1974,
+    "income": "V4154",
+    "age": "ER30163",
+    "family_id": "ER30160",
+    "sequence": "ER30161",
+    "relationship": "ER30162"
+  },
+  {
+    "wave": 1976,
+    "income_year": 1975,
+    "income": "V5029",
+    "age": "ER30191",
+    "family_id": "ER30188",
+    "sequence": "ER30189",
+    "relationship": "ER30190"
+  },
+  {
+    "wave": 1977,
+    "income_year": 1976,
+    "income": "V5626",
+    "age": "ER30220",
+    "family_id": "ER30217",
+    "sequence": "ER30218",
+    "relationship": "ER30219"
+  },
+  {
+    "wave": 1978,
+    "income_year": 1977,
+    "income": "V6173",
+    "age": "ER30249",
+    "family_id": "ER30246",
+    "sequence": "ER30247",
+    "relationship": "ER30248"
+  },
+  {
+    "wave": 1979,
+    "income_year": 1978,
+    "income": "V6766",
+    "age": "ER30286",
+    "family_id": "ER30283",
+    "sequence": "ER30284",
+    "relationship": "ER30285"
+  },
+  {
+    "wave": 1980,
+    "income_year": 1979,
+    "income": "V7412",
+    "age": "ER30316",
+    "family_id": "ER30313",
+    "sequence": "ER30314",
+    "relationship": "ER30315"
+  },
+  {
+    "wave": 1981,
+    "income_year": 1980,
+    "income": "V8065",
+    "age": "ER30346",
+    "family_id": "ER30343",
+    "sequence": "ER30344",
+    "relationship": "ER30345"
+  },
+  {
+    "wave": 1982,
+    "income_year": 1981,
+    "income": "V8689",
+    "age": "ER30376",
+    "family_id": "ER30373",
+    "sequence": "ER30374",
+    "relationship": "ER30375"
+  },
+  {
+    "wave": 1983,
+    "income_year": 1982,
+    "income": "V9375",
+    "age": "ER30402",
+    "family_id": "ER30399",
+    "sequence": "ER30400",
+    "relationship": "ER30401"
+  },
+  {
+    "wave": 1984,
+    "income_year": 1983,
+    "income": "V11022",
+    "age": "ER30432",
+    "family_id": "ER30429",
+    "sequence": "ER30430",
+    "relationship": "ER30431"
+  },
+  {
+    "wave": 1985,
+    "income_year": 1984,
+    "income": "V12371",
+    "age": "ER30466",
+    "family_id": "ER30463",
+    "sequence": "ER30464",
+    "relationship": "ER30465"
+  },
+  {
+    "wave": 1986,
+    "income_year": 1985,
+    "income": "V13623",
+    "age": "ER30501",
+    "family_id": "ER30498",
+    "sequence": "ER30499",
+    "relationship": "ER30500"
+  },
+  {
+    "wave": 1987,
+    "income_year": 1986,
+    "income": "V14670",
+    "age": "ER30538",
+    "family_id": "ER30535",
+    "sequence": "ER30536",
+    "relationship": "ER30537"
+  },
+  {
+    "wave": 1988,
+    "income_year": 1987,
+    "income": "V16144",
+    "age": "ER30573",
+    "family_id": "ER30570",
+    "sequence": "ER30571",
+    "relationship": "ER30572"
+  },
+  {
+    "wave": 1989,
+    "income_year": 1988,
+    "income": "V17533",
+    "age": "ER30609",
+    "family_id": "ER30606",
+    "sequence": "ER30607",
+    "relationship": "ER30608"
+  },
+  {
+    "wave": 1990,
+    "income_year": 1989,
+    "income": "V18875",
+    "age": "ER30645",
+    "family_id": "ER30642",
+    "sequence": "ER30643",
+    "relationship": "ER30644"
+  },
+  {
+    "wave": 1991,
+    "income_year": 1990,
+    "income": "V20175",
+    "age": "ER30692",
+    "family_id": "ER30689",
+    "sequence": "ER30690",
+    "relationship": "ER30691"
+  },
+  {
+    "wave": 1992,
+    "income_year": 1991,
+    "income": "V21481",
+    "age": "ER30736",
+    "family_id": "ER30733",
+    "sequence": "ER30734",
+    "relationship": "ER30735"
+  },
+  {
+    "wave": 1993,
+    "income_year": 1992,
+    "income": "V23322",
+    "age": "ER30809",
+    "family_id": "ER30806",
+    "sequence": "ER30807",
+    "relationship": "ER30808"
+  },
+  {
+    "wave": 1994,
+    "income_year": 1993,
+    "income": "ER4153",
+    "age": "ER33104",
+    "family_id": "ER33101",
+    "sequence": "ER33102",
+    "relationship": "ER33103"
+  },
+  {
+    "wave": 1995,
+    "income_year": 1994,
+    "income": "ER6993",
+    "age": "ER33204",
+    "family_id": "ER33201",
+    "sequence": "ER33202",
+    "relationship": "ER33203"
+  },
+  {
+    "wave": 1996,
+    "income_year": 1995,
+    "income": "ER9244",
+    "age": "ER33304",
+    "family_id": "ER33301",
+    "sequence": "ER33302",
+    "relationship": "ER33303"
+  },
+  {
+    "wave": 1997,
+    "income_year": 1996,
+    "income": "ER12079",
+    "age": "ER33404",
+    "family_id": "ER33401",
+    "sequence": "ER33402",
+    "relationship": "ER33403"
+  },
+  {
+    "wave": 1999,
+    "income_year": 1998,
+    "income": "ER16462",
+    "age": "ER33504",
+    "family_id": "ER33501",
+    "sequence": "ER33502",
+    "relationship": "ER33503"
+  },
+  {
+    "wave": 2001,
+    "income_year": 2000,
+    "income": "ER20456",
+    "age": "ER33604",
+    "family_id": "ER33601",
+    "sequence": "ER33602",
+    "relationship": "ER33603"
+  },
+  {
+    "wave": 2003,
+    "income_year": 2002,
+    "income": "ER24099",
+    "age": "ER33704",
+    "family_id": "ER33701",
+    "sequence": "ER33702",
+    "relationship": "ER33703"
+  },
+  {
+    "wave": 2005,
+    "income_year": 2004,
+    "income": "ER28037",
+    "age": "ER33804",
+    "family_id": "ER33801",
+    "sequence": "ER33802",
+    "relationship": "ER33803"
+  },
+  {
+    "wave": 2007,
+    "income_year": 2006,
+    "income": "ER41027",
+    "age": "ER33904",
+    "family_id": "ER33901",
+    "sequence": "ER33902",
+    "relationship": "ER33903"
+  },
+  {
+    "wave": 2009,
+    "income_year": 2008,
+    "income": "ER46935",
+    "age": "ER34004",
+    "family_id": "ER34001",
+    "sequence": "ER34002",
+    "relationship": "ER34003"
+  },
+  {
+    "wave": 2011,
+    "income_year": 2010,
+    "income": "ER52343",
+    "age": "ER34104",
+    "family_id": "ER34101",
+    "sequence": "ER34102",
+    "relationship": "ER34103"
+  },
+  {
+    "wave": 2013,
+    "income_year": 2012,
+    "income": "ER58152",
+    "age": "ER34204",
+    "family_id": "ER34201",
+    "sequence": "ER34202",
+    "relationship": "ER34203"
+  },
+  {
+    "wave": 2015,
+    "income_year": 2014,
+    "income": "ER65349",
+    "age": "ER34305",
+    "family_id": "ER34301",
+    "sequence": "ER34302",
+    "relationship": "ER34303"
+  },
+  {
+    "wave": 2017,
+    "income_year": 2016,
+    "income": "ER71426",
+    "age": "ER34504",
+    "family_id": "ER34501",
+    "sequence": "ER34502",
+    "relationship": "ER34503"
+  },
+  {
+    "wave": 2019,
+    "income_year": 2018,
+    "income": "ER77448",
+    "age": "ER34704",
+    "family_id": "ER34701",
+    "sequence": "ER34702",
+    "relationship": "ER34703"
+  },
+  {
+    "wave": 2021,
+    "income_year": 2020,
+    "income": "ER81775",
+    "age": "ER34904",
+    "family_id": "ER34901",
+    "sequence": "ER34902",
+    "relationship": "ER34903"
+  },
+  {
+    "wave": 2023,
+    "income_year": 2022,
+    "income": "ER85629",
+    "age": "ER35104",
+    "family_id": "ER35101",
+    "sequence": "ER35102",
+    "relationship": "ER35103"
+  }
+]

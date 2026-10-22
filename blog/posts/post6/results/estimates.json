@@ -1,0 +1,34 @@
+[
+  {
+    "model": "Single year: both prime age",
+    "n": 3108,
+    "ige": 0.43541949236875205,
+    "se_cluster_father": 0.032835025919025936,
+    "ci_low": 0.3710628415674612,
+    "ci_high": 0.4997761431700429
+  },
+  {
+    "model": "Multiple years: both prime age",
+    "n": 3108,
+    "ige": 0.5743378287833498,
+    "se_cluster_father": 0.02896274304350862,
+    "ci_low": 0.5175708524180729,
+    "ci_high": 0.6311048051486268
+  },
+  {
+    "model": "Early adult child, parent average",
+    "n": 3108,
+    "ige": 0.4531726751604326,
+    "se_cluster_father": 0.02950915492581097,
+    "ci_low": 0.3953347315058431,
+    "ci_high": 0.5110106188150221
+  },
+  {
+    "model": "Prime-age child, parent average",
+    "n": 3108,
+    "ige": 0.6005337419378043,
+    "se_cluster_father": 0.03453815028721523,
+    "ci_low": 0.5328389673748625,
+    "ci_high": 0.6682285165007461
+  }
+]

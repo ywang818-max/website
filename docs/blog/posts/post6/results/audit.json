@@ -1,0 +1,31 @@
+{
+  "candidate_person_waves": 3678048,
+  "nonresident_missing_age_or_family": 2767402,
+  "not_current_head_or_spouse_partner": 410300,
+  "nonpositive_or_bottomcoded_income": 2799,
+  "topcode_boundary_excluded": 6336,
+  "people": 85536,
+  "valid_person_waves": 491211,
+  "father_links_missing_extract_person": 24219,
+  "father_type_sex_inconsistency_excluded": 3,
+  "linked_child_father_pairs": 29215,
+  "fims_parent_types": {
+    "M": 60013,
+    "F": 53437,
+    "": 31897
+  },
+  "same_sample_pairs": 3108,
+  "distinct_fathers": 1679,
+  "mean_observed_years_child": 5.254826254826255,
+  "mean_observed_years_parent": 8.119047619047619,
+  "mean_single_age_child": 39.5485842985843,
+  "mean_single_age_parent": 40.025418275418275,
+  "mean_early_age_child": 26.864221364221365,
+  "input_sha256": {
+    "J366555.txt": "2ff2dc71f8c88760c88c10206a8b3d63c30abbb68818df609a49967d1b297341",
+    "J366555.do": "b7e154194fbd876ec6da6b56df94f9f2760111d0275674e3e51d0479476d0edb",
+    "fim16218_gid_BO_2_UBL.txt": "80955d44b089ad8aefac66758961daefa0f38fda230b90c05c6ded05d347e795"
+  },
+  "income_units": "2022 dollars; CPI annual table rounded to one decimal",
+  "estimator": "Unweighted descriptive OLS; 95% normal CIs clustered by father; same pairs in all models"
+}
