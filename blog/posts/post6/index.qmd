@@ -18,7 +18,7 @@ Would a graduate student’s income today tell us where they will stand at forty
 
 The Panel Study of Income Dynamics (PSID) follows families and their descendants. I use a 261-variable, 85,536-person extract covering available interview waves from 1968 through 2023, plus a biological-parent FIMS mapping. The income measure is **family money income**, not individual earnings.
 
-Download your own authorized extract and keep the ASCII file, Stata reading statements, and codebook together. The repository’s Python script reads fixed-width positions from those statements; opening the file as a comma-separated CSV would misalign its fields. Run it with your local paths:
+Download your own authorized extract and keep the ASCII file, Stata reading statements, and codebook together. The repository’s Python script reads fixed-width positions from those statements; opening the file as a comma-separated CSV would misalign its fields. After installing the packages listed in the README, run this command from `blog/posts/post6`, using your local paths:
 
 ```bash
 python code/analyze.py --data /path/J366555.txt \
@@ -36,6 +36,18 @@ JOIN families AS f
 
 `SELECT` chooses columns; `JOIN` combines rows whose keys agree. Validate unique person–wave and family–wave keys first, then assert that this join preserves the membership row count. Otherwise, duplicate keys can silently multiply observations.
 
+The full importer creates these tables in Python. SQL then runs through the standard-library connection:
+
+```python
+import sqlite3
+from pathlib import Path
+
+db = sqlite3.connect(":memory:")
+# Populate people, membership, families, and links with the importer first.
+db.executescript(Path("sql/match.sql").read_text())
+matched = db.execute("SELECT * FROM matched ORDER BY child_pid").fetchall()
+```
+
 ## 2. Summarize years before matching generations
 
 Income generally refers to the calendar year before the interview. I convert it to 2022 dollars with annual CPI values and retain current household heads or spouses/partners, avoiding assigning a co-resident adult child their parents’ income. Codebook-specific upper codes and incomes at or below $1 are excluded, including historical bottom-coded losses.
@@ -52,23 +64,36 @@ HAVING COUNT(*) >= 3;
 
 `WHERE` filters annual records; `GROUP BY` makes one group per person. `AVG` and `COUNT` aggregate those records, while `HAVING` filters the resulting groups. Join the child and father summaries to FIMS **after aggregation**, preventing every child-year from matching every father-year. The complete SQL file also selects single observations closest to ages 40 and 27, breaking ties with the earlier wave.
 
+Of 29,215 linked child–father pairs present in the extract, 3,108 meet all income and age-window requirements. Requiring an early-adult observation as well as both prime-age histories keeps every comparison on this same selected sample.
+
 ## 3. Estimate and compare persistence
 
 In Python, estimate an intercept and slope in:
 
 $$\log(Y_{child})=\alpha+\beta\log(Y_{father})+\varepsilon.$$
 
-The slope is the intergenerational elasticity (IGE): approximately how much higher child income is associated with a 1% difference in father income. Larger values indicate stronger income persistence, not a causal effect of parental money.
+The slope is the intergenerational elasticity (IGE): approximately how much higher child income is associated with a 1% difference in father income. Larger values indicate stronger income persistence, not a causal effect of parental money. Given the SQL connection above, Python obtains the slope as follows:
+
+```python
+import numpy as np
+
+rows = db.execute("SELECT parent_avg, child_avg FROM matched").fetchall()
+y_parent, y_child = np.asarray(rows).T
+X = np.column_stack([np.ones(len(rows)), np.log(y_parent)])
+intercept, ige = np.linalg.lstsq(X, np.log(y_child), rcond=None)[0]
+```
+
+The full script repeats this regression for each income definition and exports the estimates and confidence intervals.
 
 ![Figure 1. Single-year versus multi-year prime-age family-income estimates, using identical matched pairs.](results/figures/figure1.svg)
 
-All comparisons use the same **3,108 child–father pairs**, representing 1,679 distinct fathers. Single-year prime-age income gives an IGE of **0.435**; averaging available prime-age observations gives **0.574**. Children contribute 5.25 years on average and fathers 8.12. The stronger association is consistent with averaging reducing temporary-income noise, particularly in the parental measure. These averages remain imperfect proxies for lifetime income.
+All comparisons use the same **3,108 child–father pairs**, representing 1,679 distinct fathers. Single-year prime-age income gives an IGE of **0.435**; averaging available prime-age observations gives **0.574**. Children contribute 5.25 years on average and fathers 8.12. The stronger association is consistent with averaging reducing temporary-income noise, particularly in the parental measure. At 0.574, a 10% difference in father income is associated with approximately a 5.6% difference in child income (`1.10**0.574 - 1`). These averages remain imperfect proxies for lifetime income.
 
 ## 4. Check age separately
 
 ![Figure 2. Early-adult versus prime-age child income, holding the father’s multi-year measure and the matched sample fixed.](results/figures/figure2.svg)
 
-Holding father income fixed at its prime-age average, measuring child income near interview age 27 produces **0.453**, compared with **0.601** near age 40. Thus, the income–lifetime-income relationship can depend on age: this is the concern behind life-cycle bias. Averaging alone does not solve it. This comparison demonstrates age sensitivity; changing calendar periods and household composition mean it cannot isolate the exact size of that bias.
+Next, separate age from averaging: keep the father’s prime-age average, but use a single child observation in both models. This is why the prime-age benchmark is now 0.601 rather than the two-generation-average estimate of 0.574. Holding father income fixed at its prime-age average, measuring child income near interview age 27 produces **0.453**, compared with **0.601** near age 40. Thus, the income–lifetime-income relationship can depend on age: this is the concern behind life-cycle bias. Averaging alone does not solve it. This comparison demonstrates age sensitivity; changing calendar periods and household composition mean it cannot isolate the exact size of that bias.
 
 These are unweighted, selected-sample estimates, not national mobility statistics. Requiring long follow-up excludes many people. Figures show 95% confidence intervals clustered by father because siblings share a parent; they do not establish causation.
 

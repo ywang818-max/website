@@ -15,3 +15,17 @@ Checked October 21, 2026.
 Limits: this is a selected, unweighted classroom sample. Normal father-cluster intervals do not implement the full survey design or all extended-family dependence. Income windows use interview ages, with previous-calendar-year income. CPI values use published one-decimal precision. These checks do not certify an unbiased national IGE or a causal measure of life-cycle bias.
 
 The workspace cannot write Quarto’s global macOS cache. The deployed HTML uses the existing Quarto page shell and the Pandoc-rendered article body; the original `index.qmd` is supplied for standard Quarto rendering. This preserves existing navigation and styling without changing numerical results.
+
+## October 22 independent review
+
+Re-read the original Blog Posts prompt, the 10-point rubric, prior TA feedback,
+and the supplied lecture transcript. Ran a fresh-copy analysis again using the
+original local inputs. Estimates CSV/JSON, audit JSON and both SVG figures were
+byte-identical to the published outputs. Independently recomputed all four OLS
+slopes using centered cross-products, and father-cluster standard errors using
+scalar cluster scores; coefficients and standard errors agreed within 1e-10.
+
+Added explicit Python-to-SQL execution and NumPy estimation examples, specified
+the working directory for the short command, explained complete-case selection,
+and distinguished the 0.574 average-child benchmark from the 0.601 single-child
+benchmark. Numerical findings and selection rules are unchanged.

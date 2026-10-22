@@ -168,51 +168,169 @@ ul.task-list li input[type="checkbox"] {
 
 
 </header>
-<p>Would a graduate student’s income today tell us where they will stand at forty? Probably not. The same problem matters when comparing children with their parents: a convenient single-year observation can give a misleading picture of long-run economic mobility. This tutorial uses Python’s SQLite interface to build a defensible parent–child match, then asks how averaging income and changing the child’s measurement age affect the answer.</p>
-<h2 id="build-identities-before-joining-incomes">1. Build identities before joining incomes</h2>
-<p>The Panel Study of Income Dynamics (PSID) follows families and their descendants. I use a 261-variable, 85,536-person extract covering available interview waves from 1968 through 2023, plus a biological-parent FIMS mapping. The income measure is <strong>family money income</strong>, not individual earnings.</p>
-<p>Download your own authorized extract and keep the ASCII file, Stata reading statements, and codebook together. The repository’s Python script reads fixed-width positions from those statements; opening the file as a comma-separated CSV would misalign its fields. Run it with your local paths:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/analyze.py <span class="at">--data</span> /path/J366555.txt <span class="dt">\</span></span>
+<p>Would a graduate student’s income today tell us where they will stand
+at forty? Probably not. The same problem matters when comparing children
+with their parents: a convenient single-year observation can give a
+misleading picture of long-run economic mobility. This tutorial uses
+Python’s SQLite interface to build a defensible parent–child match, then
+asks how averaging income and changing the child’s measurement age
+affect the answer.</p>
+<h2 id="build-identities-before-joining-incomes">1. Build identities
+before joining incomes</h2>
+<p>The Panel Study of Income Dynamics (PSID) follows families and their
+descendants. I use a 261-variable, 85,536-person extract covering
+available interview waves from 1968 through 2023, plus a
+biological-parent FIMS mapping. The income measure is <strong>family
+money income</strong>, not individual earnings.</p>
+<p>Download your own authorized extract and keep the ASCII file, Stata
+reading statements, and codebook together. The repository’s Python
+script reads fixed-width positions from those statements; opening the
+file as a comma-separated CSV would misalign its fields. After
+installing the packages listed in the README, run this command from
+<code>blog/posts/post6</code>, using your local paths:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/analyze.py <span class="at">--data</span> /path/J366555.txt <span class="dt">\</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--statements</span> /path/J366555.do <span class="at">--fims</span> /path/fim16218_gid_BO_2_UBL.txt</span></code></pre></div>
-<p>A permanent person ID combines the 1968 family identifier and person number. FIMS supplies explicit child and father IDs; sharing an original family identifier alone does not establish parenthood. A separate family interview ID changes across waves. Therefore, connect a person’s membership record to family income using <strong>both wave and family ID</strong>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> m.pid, m.wave, m.age, f.income_real</span>
+<p>A permanent person ID combines the 1968 family identifier and person
+number. FIMS supplies explicit child and father IDs; sharing an original
+family identifier alone does not establish parenthood. A separate family
+interview ID changes across waves. Therefore, connect a person’s
+membership record to family income using <strong>both wave and family
+ID</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> m.pid, m.wave, m.age, f.income_real</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> membership <span class="kw">AS</span> m</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> families <span class="kw">AS</span> f</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> f.wave <span class="op">=</span> m.wave <span class="kw">AND</span> f.family_id <span class="op">=</span> m.family_id;</span></code></pre></div>
-<p><code>SELECT</code> chooses columns; <code>JOIN</code> combines rows whose keys agree. Validate unique person–wave and family–wave keys first, then assert that this join preserves the membership row count. Otherwise, duplicate keys can silently multiply observations.</p>
-<h2 id="summarize-years-before-matching-generations">2. Summarize years before matching generations</h2>
-<p>Income generally refers to the calendar year before the interview. I convert it to 2022 dollars with annual CPI values and retain current household heads or spouses/partners, avoiding assigning a co-resident adult child their parents’ income. Codebook-specific upper codes and incomes at or below $1 are excluded, including historical bottom-coded losses.</p>
-<p>For each generation, the prime-age window is interview ages 35–44. This corresponds approximately to income ages 34–43. Require at least three valid observations, average income <strong>levels</strong>, and only then take logarithms:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> pid, <span class="fu">AVG</span>(income_real) <span class="kw">AS</span> avg_income, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_years</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> panel</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> age <span class="kw">BETWEEN</span> <span class="dv">35</span> <span class="kw">AND</span> <span class="dv">44</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> pid</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="op">&gt;=</span> <span class="dv">3</span>;</span></code></pre></div>
-<p><code>WHERE</code> filters annual records; <code>GROUP BY</code> makes one group per person. <code>AVG</code> and <code>COUNT</code> aggregate those records, while <code>HAVING</code> filters the resulting groups. Join the child and father summaries to FIMS <strong>after aggregation</strong>, preventing every child-year from matching every father-year. The complete SQL file also selects single observations closest to ages 40 and 27, breaking ties with the earlier wave.</p>
-<h2 id="estimate-and-compare-persistence">3. Estimate and compare persistence</h2>
+<p><code>SELECT</code> chooses columns; <code>JOIN</code> combines rows
+whose keys agree. Validate unique person–wave and family–wave keys
+first, then assert that this join preserves the membership row count.
+Otherwise, duplicate keys can silently multiply observations.</p>
+<p>The full importer creates these tables in Python. SQL then runs
+through the standard-library connection:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&quot;:memory:&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Populate people, membership, families, and links with the importer first.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>db.executescript(Path(<span class="st">&quot;sql/match.sql&quot;</span>).read_text())</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>matched <span class="op">=</span> db.execute(<span class="st">&quot;SELECT * FROM matched ORDER BY child_pid&quot;</span>).fetchall()</span></code></pre></div>
+<h2 id="summarize-years-before-matching-generations">2. Summarize years
+before matching generations</h2>
+<p>Income generally refers to the calendar year before the interview. I
+convert it to 2022 dollars with annual CPI values and retain current
+household heads or spouses/partners, avoiding assigning a co-resident
+adult child their parents’ income. Codebook-specific upper codes and
+incomes at or below $1 are excluded, including historical bottom-coded
+losses.</p>
+<p>For each generation, the prime-age window is interview ages 35–44.
+This corresponds approximately to income ages 34–43. Require at least
+three valid observations, average income <strong>levels</strong>, and
+only then take logarithms:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> pid, <span class="fu">AVG</span>(income_real) <span class="kw">AS</span> avg_income, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_years</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> panel</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> age <span class="kw">BETWEEN</span> <span class="dv">35</span> <span class="kw">AND</span> <span class="dv">44</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> pid</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="op">&gt;=</span> <span class="dv">3</span>;</span></code></pre></div>
+<p><code>WHERE</code> filters annual records; <code>GROUP BY</code>
+makes one group per person. <code>AVG</code> and <code>COUNT</code>
+aggregate those records, while <code>HAVING</code> filters the resulting
+groups. Join the child and father summaries to FIMS <strong>after
+aggregation</strong>, preventing every child-year from matching every
+father-year. The complete SQL file also selects single observations
+closest to ages 40 and 27, breaking ties with the earlier wave.</p>
+<p>Of 29,215 linked child–father pairs present in the extract, 3,108
+meet all income and age-window requirements. Requiring an early-adult
+observation as well as both prime-age histories keeps every comparison
+on this same selected sample.</p>
+<h2 id="estimate-and-compare-persistence">3. Estimate and compare
+persistence</h2>
 <p>In Python, estimate an intercept and slope in:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mrow><mi>c</mi><mi>h</mi><mi>i</mi><mi>l</mi><mi>d</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>α</mi><mo>+</mo><mi>β</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mrow><mi>f</mi><mi>a</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>ε</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\log(Y_{child})=\alpha+\beta\log(Y_{father})+\varepsilon.</annotation></semantics></math></p>
-<p>The slope is the intergenerational elasticity (IGE): approximately how much higher child income is associated with a 1% difference in father income. Larger values indicate stronger income persistence, not a causal effect of parental money.</p>
+<p>The slope is the intergenerational elasticity (IGE): approximately
+how much higher child income is associated with a 1% difference in
+father income. Larger values indicate stronger income persistence, not a
+causal effect of parental money. Given the SQL connection above, Python
+obtains the slope as follows:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> db.execute(<span class="st">&quot;SELECT parent_avg, child_avg FROM matched&quot;</span>).fetchall()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y_parent, y_child <span class="op">=</span> np.asarray(rows).T</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([np.ones(<span class="bu">len</span>(rows)), np.log(y_parent)])</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>intercept, ige <span class="op">=</span> np.linalg.lstsq(X, np.log(y_child), rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span></code></pre></div>
+<p>The full script repeats this regression for each income definition
+and exports the estimates and confidence intervals.</p>
 <figure>
-<img src="results/figures/figure1.svg" alt="Figure 1. Single-year versus multi-year prime-age family-income estimates, using identical matched pairs." />
-<figcaption aria-hidden="true">Figure 1. Single-year versus multi-year prime-age family-income estimates, using identical matched pairs.</figcaption>
+<img src="results/figures/figure1.svg"
+alt="Figure 1. Single-year versus multi-year prime-age family-income estimates, using identical matched pairs." />
+<figcaption aria-hidden="true">Figure 1. Single-year versus multi-year
+prime-age family-income estimates, using identical matched
+pairs.</figcaption>
 </figure>
-<p>All comparisons use the same <strong>3,108 child–father pairs</strong>, representing 1,679 distinct fathers. Single-year prime-age income gives an IGE of <strong>0.435</strong>; averaging available prime-age observations gives <strong>0.574</strong>. Children contribute 5.25 years on average and fathers 8.12. The stronger association is consistent with averaging reducing temporary-income noise, particularly in the parental measure. These averages remain imperfect proxies for lifetime income.</p>
+<p>All comparisons use the same <strong>3,108 child–father
+pairs</strong>, representing 1,679 distinct fathers. Single-year
+prime-age income gives an IGE of <strong>0.435</strong>; averaging
+available prime-age observations gives <strong>0.574</strong>. Children
+contribute 5.25 years on average and fathers 8.12. The stronger
+association is consistent with averaging reducing temporary-income
+noise, particularly in the parental measure. At 0.574, a 10% difference
+in father income is associated with approximately a 5.6% difference in
+child income (<code>1.10**0.574 - 1</code>). These averages remain
+imperfect proxies for lifetime income.</p>
 <h2 id="check-age-separately">4. Check age separately</h2>
 <figure>
-<img src="results/figures/figure2.svg" alt="Figure 2. Early-adult versus prime-age child income, holding the father’s multi-year measure and the matched sample fixed." />
-<figcaption aria-hidden="true">Figure 2. Early-adult versus prime-age child income, holding the father’s multi-year measure and the matched sample fixed.</figcaption>
+<img src="results/figures/figure2.svg"
+alt="Figure 2. Early-adult versus prime-age child income, holding the father’s multi-year measure and the matched sample fixed." />
+<figcaption aria-hidden="true">Figure 2. Early-adult versus prime-age
+child income, holding the father’s multi-year measure and the matched
+sample fixed.</figcaption>
 </figure>
-<p>Holding father income fixed at its prime-age average, measuring child income near interview age 27 produces <strong>0.453</strong>, compared with <strong>0.601</strong> near age 40. Thus, the income–lifetime-income relationship can depend on age: this is the concern behind life-cycle bias. Averaging alone does not solve it. This comparison demonstrates age sensitivity; changing calendar periods and household composition mean it cannot isolate the exact size of that bias.</p>
-<p>These are unweighted, selected-sample estimates, not national mobility statistics. Requiring long follow-up excludes many people. Figures show 95% confidence intervals clustered by father because siblings share a parent; they do not establish causation.</p>
+<p>Next, separate age from averaging: keep the father’s prime-age
+average, but use a single child observation in both models. This is why
+the prime-age benchmark is now 0.601 rather than the
+two-generation-average estimate of 0.574. Holding father income fixed at
+its prime-age average, measuring child income near interview age 27
+produces <strong>0.453</strong>, compared with <strong>0.601</strong>
+near age 40. Thus, the income–lifetime-income relationship can depend on
+age: this is the concern behind life-cycle bias. Averaging alone does
+not solve it. This comparison demonstrates age sensitivity; changing
+calendar periods and household composition mean it cannot isolate the
+exact size of that bias.</p>
+<p>These are unweighted, selected-sample estimates, not national
+mobility statistics. Requiring long follow-up excludes many people.
+Figures show 95% confidence intervals clustered by father because
+siblings share a parent; they do not establish causation.</p>
 <ul>
 <li>Match generations with documented relationships and stable IDs.</li>
 <li>Aggregate within people before joining generations.</li>
-<li>Check both income averaging and age at measurement before interpreting persistence.</li>
+<li>Check both income averaging and age at measurement before
+interpreting persistence.</li>
 </ul>
 <h2 id="sources-and-replication">Sources and replication</h2>
-<p>Panel Study of Income Dynamics, public use dataset. Produced and distributed by the Survey Research Center, Institute for Social Research, University of Michigan, Ann Arbor, MI (2026). Sources: <a href="https://simba.isr.umich.edu/default.aspx">PSID Data Center</a>, <a href="https://simba.isr.umich.edu/FIMS/default.aspx">FIMS</a>, and <a href="https://psidonline.isr.umich.edu/Guide/FAQ.aspx?Type=1">PSID identifier guidance</a>. Annual CPI values are from the <a href="https://www.minneapolisfed.org/about-us/monetary-policy/inflation-calculator/consumer-price-index-1913-">Minneapolis Fed historical table</a>, rounded to one decimal. See <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3692297/">research on life-cycle measurement</a> and <a href="https://docs.python.org/3/library/sqlite3.html">Python’s sqlite3 documentation</a>.</p>
-<p><a href="https://github.com/ywang818-max/website/tree/main/blog/posts/post6">Code, variable mapping, replication instructions, and validation</a> and the <a href="results/estimates.csv">aggregate estimates table</a> accompany the article. Raw records and individual matches are not distributed here; replication requires your own authorized PSID download under its <a href="https://simba.isr.umich.edu/U/CondUse.aspx">Conditions of Use</a>.</p>
+<p>Panel Study of Income Dynamics, public use dataset. Produced and
+distributed by the Survey Research Center, Institute for Social
+Research, University of Michigan, Ann Arbor, MI (2026). Sources: <a
+href="https://simba.isr.umich.edu/default.aspx">PSID Data Center</a>, <a
+href="https://simba.isr.umich.edu/FIMS/default.aspx">FIMS</a>, and <a
+href="https://psidonline.isr.umich.edu/Guide/FAQ.aspx?Type=1">PSID
+identifier guidance</a>. Annual CPI values are from the <a
+href="https://www.minneapolisfed.org/about-us/monetary-policy/inflation-calculator/consumer-price-index-1913-">Minneapolis
+Fed historical table</a>, rounded to one decimal. See <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3692297/">research on
+life-cycle measurement</a> and <a
+href="https://docs.python.org/3/library/sqlite3.html">Python’s sqlite3
+documentation</a>.</p>
+<p><a
+href="https://github.com/ywang818-max/website/tree/main/blog/posts/post6">Code,
+variable mapping, replication instructions, and validation</a> and the
+<a href="results/estimates.csv">aggregate estimates table</a> accompany
+the article. Raw records and individual matches are not distributed
+here; replication requires your own authorized PSID download under its
+<a href="https://simba.isr.umich.edu/U/CondUse.aspx">Conditions of
+Use</a>.</p>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
