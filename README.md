@@ -42,3 +42,9 @@ The script generates all maps and county tables from archived ACS and Census TIG
 Start with [the Blog 6 README](blog/posts/post6/README.md) for the exact input requirements, folder map, SQL matching steps and replication commands. The [published tutorial](https://ywang818-max.github.io/website/blog/posts/post6/) compares single-year and multi-year IGE estimates and age at measurement on the same 3,108 pairs.
 
 Public files include code, variable metadata, CPI inputs and aggregate outputs. PSID microdata and individual matches are not distributed; replication requires independently authorized local inputs. See [the input guide](blog/posts/post6/data/README.md) and [clean-copy verification](blog/posts/post6/REPRODUCTION_CHECK.md).
+
+## Blog 7: Interactive Plotly county rent-budget explorer
+
+Start with [the Blog 7 README](blog/posts/post7/README.md) for source definitions, exact file paths, reproduction commands and tested interactions. The [published article](https://ywang818-max.github.io/website/blog/posts/post7/) uses budget and market-size filters, county inspection, rent uncertainty and a synchronized table.
+
+Run `python3 blog/posts/post7/code/build.py` from this repository root. The archived ACS response and pinned local Plotly.js runtime are included; the standard-library build runs offline.

@@ -1,0 +1,13 @@
+{
+  "retrieved_utc": "2026-10-20T02:45:04.949487+00:00",
+  "acs_period": "2020-2024",
+  "money_units": "2024 inflation-adjusted dollars",
+  "sources": {
+    "acs_reporter.json": {
+      "url": "https://api.censusreporter.org/1.0/data/show/acs2024_5yr?table_ids=B25064%2CB25119%2CB25070&geo_ids=050%7C04000US42%2C04000US42",
+      "sha256": "8516df11de9c2bf8880dfa17c6298b9a5ccfbf7ece7caa88fbe01cfd57fca017",
+      "bytes": 52141
+    }
+  },
+  "note": "Same verified snapshot as Blog 5; Blog 7 rebuilds statistics independently."
+}

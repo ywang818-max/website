@@ -1,0 +1,10 @@
+{
+  "source_sha256": "8516df11de9c2bf8880dfa17c6298b9a5ccfbf7ece7caa88fbe01cfd57fca017",
+  "unique_counties": 67,
+  "categories_reconcile": true,
+  "county_counts_reconcile_to_state": true,
+  "filter_rule": "median rent <= budget AND computable households >= minimum; inclusive boundaries",
+  "pooled_rate": "sum(burdened households)/sum(computable households), not mean county rates",
+  "chart_runtime": "Plotly.js basic 3.1.0; local vendored asset",
+  "plotly_sha256": "80d756297ee4b5e701cee4e5c88aa52ec822c3ed84fd23bda6e20b03d10492a6"
+}

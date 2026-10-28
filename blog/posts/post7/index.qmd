@@ -1,0 +1,54 @@
+---
+title: "What Does Your Rent Budget Leave Out?"
+subtitle: "An interactive Pennsylvania county comparison with Plotly."
+author: "Yixuan Wang"
+date: "2026-10-27"
+date-format: "MMMM D, YYYY"
+categories: [Plotly, Housing, Interactive Data]
+description: "Adjust a rent ceiling, inspect counties, and see why lower median rent is only the beginning of an affordability comparison."
+image: results/preview.svg
+format:
+  html:
+    toc: false
+---
+
+A student comparing places to live might begin with a monthly rent ceiling. That is useful, but a cheaper place can still be difficult for local renters to afford. **Which Pennsylvania counties remain in a budget-based comparison, and what does that shortlist conceal about local housing pressure?**
+
+This post is for students and early-career renters learning how to compare places. It extends the county data used in Blog 5: instead of another set of maps, the reader can change the comparison itself. The goal is a more informed shortlist, not a recommendation of a particular apartment or neighborhood.
+
+## Start with the full comparison
+
+I use the U.S. Census Bureau’s **2020–2024 American Community Survey five-year estimates**, archived through Census Reporter. All 67 Pennsylvania counties have compatible estimates. Dollar amounts are expressed in 2024 dollars; these are pooled-period estimates, not October 2026 asking rents.
+
+The horizontal axis shows median monthly gross rent, including utilities. The vertical axis shows the percentage of cash-rent households spending at least 30% of income on gross rent. Households whose ratios could not be computed are excluded from that percentage. Every dot is one county, with equal marker size so a geographically large or populous county does not automatically dominate the picture.
+
+**Try the explorer:** lower the rent ceiling to $1,000, inspect Erie, then reset and inspect Centre. Turn on rent margins of error before judging counties close to your ceiling. The county selector and linked table provide keyboard-accessible alternatives to clicking dots.
+
+```{=html}
+<style>.rent-explorer{width:100%;height:1190px;border:0;margin:18px 0} @media(max-width:600px){.rent-explorer{height:1390px}}</style>
+<iframe id="blog7-explorer" class="rent-explorer" src="results/explorer.html" title="Interactive Plotly county rent and housing-burden explorer" loading="eager"></iframe>
+<script>window.addEventListener('message',function(event){const frame=document.getElementById('blog7-explorer');if(frame && event.origin===window.location.origin && event.source===frame.contentWindow && event.data && event.data.type==='blog7-height' && Number.isFinite(event.data.height)){frame.style.height=Math.max(700,Math.min(2200,event.data.height))+'px';}});</script>
+<p><a href="results/explorer.html" target="_blank" rel="noopener">Open the full-width interactive explorer</a> · <a href="results/county_analysis.csv">Download the county data</a></p>
+```
+
+## A cheaper shortlist can still contain pressure points
+
+With the ceiling at $1,800 and no size restriction, all **67 counties** appear. Reducing it to **$1,000 leaves 43**. Those counties contain 297,858 households with computed rent burdens. Their pooled burden rate is **43.6%**, below Pennsylvania’s **48.2%**. This pooled rate sums burdened households and divides by all households with computed ratios; it is not an unweighted average of county percentages.
+
+The pooled result does not describe every county. Erie remains inside the $1,000 screen, with median gross rent of **$904**, but **49.2%** of its eligible cash-rent households are burdened. Selecting its dot reveals median annual renter-household income of **$34,870**, plus the numerator and denominator behind the rate. Lower rent alone therefore cannot establish a lighter local budget burden.
+
+Reset the filters and inspect Centre. Its median gross rent is **$1,207**, and **57.0%** of eligible renter households are burdened. It disappears below the $1,000 ceiling, but its profile explicitly reports that it is outside the filter. The display does not silently change its values or mistake an excluded county for missing data.
+
+## Use the controls to challenge the first impression
+
+At a $1,000 ceiling, requiring at least **20,000 households with computed burdens leaves two counties**. This changes the comparison toward larger rental markets; it does not establish that their estimates are statistically more reliable. The number of represented households is not the survey’s respondent sample size.
+
+The uncertainty toggle supplies another check. Cameron’s median rent is **$689 ± $116**, while Erie’s is **$904 ± $20**; these are published **90% margins of error** for median rent. Filtering uses point estimates, so counties close to a ceiling should not be classified confidently from a one-dollar difference. The explorer does not supply uncertainty intervals for the derived burden percentages or claim statistically significant county differences.
+
+Interactivity adds value here because a static scatterplot cannot show every county’s income, denominator, uncertainty and budget-dependent inclusion clearly at once. Changing the ceiling and market-size screen updates the dots, pooled totals and exact-data table together. Hovering identifies observations; selecting a county keeps its profile visible for deliberate comparison.
+
+The practical takeaway is to **screen on price, inspect local income and burden, and check uncertainty before narrowing a search**. County medians do not describe every rental, personal affordability or neighborhood safety. They also cannot explain whether wages, student populations, household composition or housing supply caused a county’s burden rate.
+
+## Sources and replication
+
+Tables: [B25064 median gross rent](https://censusreporter.org/tables/B25064/), [B25119 income by tenure](https://censusreporter.org/tables/B25119/), and [B25070 gross rent as a percentage of income](https://censusreporter.org/tables/B25070/). See the [Census guidance on five-year estimates](https://www.census.gov/programs-surveys/acs/guidance/estimates.html). The [project README, archived response, build code and validation](https://github.com/ywang818-max/website/tree/main/blog/posts/post7) reproduce the explorer offline. The chart uses a pinned local copy of [Plotly.js](https://plotly.com/javascript/plotlyjs-function-reference/), not an external script that must load at viewing time.
