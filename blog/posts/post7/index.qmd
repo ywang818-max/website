@@ -7,6 +7,9 @@ date-format: "MMMM D, YYYY"
 categories: [Plotly, Housing, Interactive Data]
 description: "Adjust a rent ceiling, inspect counties, and see why lower median rent is only the beginning of an affordability comparison."
 image: results/preview.svg
+resources:
+  - results/**
+  - vendor/**
 format:
   html:
     toc: false

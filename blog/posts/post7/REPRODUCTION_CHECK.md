@@ -12,7 +12,20 @@
 
 ## Browser verification
 
-The initial publication is being checked in a real browser; interaction results will be recorded here once observed. Numerical checks alone do not certify the controls or layout.
+Observed on the published standalone explorer and inside the article iframe:
+
+- Initial view: 67 table rows, 1,496,561 computed-burden households, 48.2% pooled burden; real Plotly SVG marks and axes visibly rendered.
+- $1,000 / all sizes: 43 rows, 297,858 households, 43.6%; article iframe also updated correctly.
+- $1,000 / minimum 20,000: 2 rows, 62,296 households, 44.7%; plotted dots, table and summary agreed.
+- Selected Centre outside those filters: profile explicitly warned of exclusion; its actual $1,207 rent and 57.0% burden remained visible in the profile.
+- Clicked Erie's plotted dot: selected Erie, displayed $904 ±$20, 49.2%, and 16,159 / 32,863 with 2,448 not-computed ratios.
+- Enabled rent margins: horizontal error bars visibly rendered for the selected subset.
+- Empty $600 state: zero rows and households, pooled rate shown as —, explanatory message; no stale previous pooled rate.
+- Reset restored 67 rows and all default controls. $1,200 produced 54 rows and 45.4%.
+- Activated Cameron's table button using Enter: keyboard-accessible profile displayed $689 ±$116 and the published income margin.
+- Inspected the article iframe, auto-fit height, full-width link, and 390-pixel nested-viewport companion. Narrow controls stacked, statistics wrapped, axes remained readable, and $1,000 filtering returned the same 43 counties. The exact-data table intentionally scrolls horizontally on narrow displays.
+
+The hover template and underlying displayed values were checked in source; automated interaction evidence above covers point clicks, controls and keyboard/table access, rather than claiming a separate pointer-hover test. These observations do not establish accessibility compliance for every browser or assistive technology.
 
 ## Interpretation limits
 

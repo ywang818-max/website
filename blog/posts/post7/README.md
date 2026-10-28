@@ -46,6 +46,7 @@ HTML and local runtime make the interaction usable without Python in the browser
 - `results/validation.json`: input/runtime hashes and numerical validation rules.
 - `results/explorer.html`, `results/explorer.js`: generated interactive artifact.
 - `results/preview.svg`: static blog-listing thumbnail; not a second analysis figure.
+- `code/preview-narrow.html` and generated `results/preview-narrow.html`: 390-pixel iframe QA companion; it is not an additional analytical figure.
 - `REPRODUCTION_CHECK.md`: numerical and rendered interaction checks actually performed.
 
 No files are available only inside a ZIP. The original response, all code and the
