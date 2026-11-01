@@ -14,7 +14,12 @@
 
 ## Browser checks
 
-The generated lab is being checked in a real browser before final delivery. Browser outcomes will be recorded here after observation; numerical checks alone do not establish rendered usability.
+- Published article opens with the correct title, November 1 date, filled numerical prose, rendered equation, embedded lab, source links and replication link.
+- All three lab tabs render actual Plotly charts. Sample-size and confidence controls update results; checked 40/95, 100/95, 200/90 and the default 200/95 coverage summaries against saved outputs.
+- Null means 29, 30 and 31 update the observed statistic, p-value and decision. For null 29, changing alpha from .05 to .10 changes the decision while retaining p=.0665.
+- Reset restores the default bootstrap view and values. Keyboard Enter activates the repeated-sampling tab. No lab console errors were recorded.
+- A 390-pixel iframe preview renders the bootstrap histogram, labels and explanation without horizontal clipping. Cross-frame automated clicks were unsupported by the browser backend, so narrow-frame control operation was not separately established.
+- Saved a screenshot of the published repeated-sampling view. GitHub Pages initial deployment completed successfully.
 
 ## Limits
 
