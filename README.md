@@ -48,3 +48,9 @@ Public files include code, variable metadata, CPI inputs and aggregate outputs. 
 Start with [the Blog 7 README](blog/posts/post7/README.md) for source definitions, exact file paths, reproduction commands and tested interactions. The [published article](https://ywang818-max.github.io/website/blog/posts/post7/) uses budget and market-size filters, county inspection, rent uncertainty and a synchronized table.
 
 Run `python3 blog/posts/post7/code/build.py` from this repository root. The archived ACS response and pinned local Plotly.js runtime are included; the standard-library build runs offline.
+
+## Blog 8: Bootstrap, coverage and simulated hypothesis tests
+
+The [Blog 8 README](blog/posts/post8/README.md) documents the fixed normal simulation model, random streams, complete file map and replication commands. The [interactive article](https://ywang818-max.github.io/website/blog/posts/post8/) links one-sample bootstrap intervals, repeated-sample coverage and Monte Carlo t-tests.
+
+Install `blog/posts/post8/code/requirements.txt`, then run `python3 blog/posts/post8/code/build.py`. All observations are simulated; code generates saved CSV results, the plotting payload, the lab and numeric article text offline. See [validation evidence](blog/posts/post8/REPRODUCTION_CHECK.md).

@@ -1,0 +1,13 @@
+{
+  "seed": 20261101,
+  "population_mean": 30.0,
+  "population_sd": 5.0,
+  "sample_sizes": [40, 100, 200],
+  "confidence_levels": [0.90, 0.95],
+  "null_means": [29.0, 30.0, 31.0],
+  "display_bootstrap_resamples": 5000,
+  "coverage_bootstrap_resamples": 999,
+  "coverage_repetitions": 2000,
+  "null_repetitions": 50000,
+  "display_intervals": 60
+}

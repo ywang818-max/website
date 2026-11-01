@@ -1,0 +1,11 @@
+{
+  "sample_mean_sd_checks": 3,
+  "manual_percentile_checks": 6,
+  "regenerated_bootstrap_means": 9,
+  "coverage_records_reconciled": 12000,
+  "displayed_coverage_intervals_reconciled": 360,
+  "null_test_rows_checked": 18,
+  "student_t_density_quadrature": "all simulated p-values and critical areas within five Monte Carlo SEs",
+  "maximum_absolute_p_error": 0.0014961813337882601,
+  "histogram_areas_and_exact_tail_counts": "pass"
+}

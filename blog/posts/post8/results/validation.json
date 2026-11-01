@@ -1,0 +1,20 @@
+{
+  "inputs_sha256": {
+    "data/config.json": "bb8fbd5d30633695a73058f99e808d55b81a7dc9266c7ea21233d63937ac7ebf",
+    "code/build.py": "df90913b37a55b9905d38a873bb8218989a2319fc0c615eb949142239087f5d4",
+    "code/lab.js": "23cd0d868089c30f88b35cb8c70aca758bc7560230a7989d9697c06fd0811186",
+    "code/lab-template.html": "ce65fdd1ccaa39b22a6b53922ed7e39a93caf521e8413d7eaab01bdf549bc4db",
+    "code/article-template.qmd": "c8dfd83a867768398e07d27d0bedab5ab804f24f3af78364f4b851738ba65140",
+    "code/preview-narrow.html": "c1802d679ecdce70c93a853866039d12e7a879da366e0f4bb3be54c4a2bc1f09",
+    "code/verify.py": "337f4acb0ace076e91709a9eb6ff090985e1a9d40fb8832b745c3396e8d90bd2",
+    "vendor/plotly-basic-3.1.0.min.js": "80d756297ee4b5e701cee4e5c88aa52ec822c3ed84fd23bda6e20b03d10492a6"
+  },
+  "coverage_records": 12000,
+  "expected_coverage_records": 12000,
+  "histogram_totals": "all equal simulation count",
+  "null_tail_bins": "exactly reconcile to extreme count",
+  "numpy_version": "2.5.3",
+  "bit_generator": "PCG64",
+  "quantile_method": "linear",
+  "normal_model": "Independent Normal(mean=30, sd=5) simulated minutes; no observed service data"
+}

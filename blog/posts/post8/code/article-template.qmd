@@ -1,0 +1,63 @@
+---
+title: "Can a 95% Interval Miss a 30-Minute Average?"
+subtitle: "A simulated waiting-time example connects bootstrap intervals, coverage, and p-values."
+author: "Yixuan Wang"
+date: "2026-11-01"
+date-format: "MMMM D, YYYY"
+categories: [Simulation, Bootstrap, Statistical Inference]
+description: "Resample one dataset, repeat the experiment, and test a claim to see what statistical uncertainty means."
+image: results/preview.svg
+resources:
+  - results/**
+  - vendor/**
+format:
+  html:
+    toc: false
+---
+
+Suppose a delivery service claims its average wait is 30 minutes. A sample will almost never average exactly 30. How much disagreement should make us doubt the claim—and can a “95% confidence interval” still miss the true average?
+
+This is a teaching experiment, not an evaluation of a real service. I simulate independent waits from a normal distribution with mean **30 minutes** and standard deviation **5 minutes**. Knowing the truth lets us check an inference method rather than merely trust its label. Readers familiar with averages can follow the three steps below.
+
+## 1. Turn one sample into an interval
+
+Start with **200 simulated observations**. Their average is **{{sample_mean}} minutes**. To bootstrap, draw 200 observations **with replacement** from that same sample and calculate their mean. Some original observations appear several times; others are absent. Repeat this 5,000 times and plot the resulting means—not the individual waiting times.
+
+The 2.5th and 97.5th percentiles give a **95% percentile-bootstrap interval of [{{ci_low}}, {{ci_high}}] minutes**. The bootstrap approximates sampling uncertainty using the observed sample as a stand-in for the unknown population. It does not create 5,000 new independent datasets from the service.
+
+Use **Step 1** in the lab to inspect the distribution. Compare sample sizes, then change the confidence level from 95% to 90%. A lower confidence target usually buys a narrower interval, at the cost of more misses.
+
+```{=html}
+<style>.inference-lab{width:100%;height:930px;border:0;margin:16px 0}@media(max-width:600px){.inference-lab{height:1250px}}</style>
+<iframe id="blog8-lab" class="inference-lab" src="results/lab.html" title="Interactive bootstrap, coverage, and hypothesis-testing simulation lab" loading="eager"></iframe>
+<script>window.addEventListener('message',function(e){const f=document.getElementById('blog8-lab');if(f&&e.origin===window.location.origin&&e.source===f.contentWindow&&e.data&&e.data.type==='blog8-height'&&Number.isFinite(e.data.height))f.style.height=Math.max(700,Math.min(1900,e.data.height))+'px';});</script>
+<p><a href="results/lab.html" target="_blank" rel="noopener">Open the full-width simulation lab</a> · <a href="results/coverage_summary.csv">Download the coverage results</a></p>
+```
+
+## 2. Ask what happens in new samples
+
+One interval cannot tell us whether a method achieves its advertised coverage. In **Step 2**, I draw **2,000 fresh population samples**, constructing a bootstrap interval separately within each. Each new sample receives 999 bootstrap resamples. The graph shows the first 60 intervals in generation order; the summary counts all 2,000.
+
+At 200 observations and 95% confidence, **{{covered}} of 2,000 intervals contain 30: {{coverage}}%**. That is close to 95%, with Monte Carlo standard error of about **{{mcse}} percentage points**. Simulation noise explains why repeated runs need not give exactly 95%.
+
+But the confidence label is not a guarantee. With only 40 observations, coverage falls to **{{small_coverage}}%** in this experiment. Percentile bootstrap intervals can under-cover in finite samples. More repetitions would measure that behavior more precisely; they would not automatically repair the interval method. Skewed data, dependence, or biased sampling could create further problems not investigated here.
+
+The interpretation is about the procedure: across repeated samples, approximately 95% of well-calibrated intervals cover the fixed truth. Once an interval has been calculated, it either includes 30 or does not. We have not assigned a 95% probability to that fixed parameter.
+
+## 3. Compare the sample with a stated claim
+
+In **Step 3**, test the two-sided null hypothesis that the population mean equals 30. The statistic measures the sample’s deviation from the claim in estimated-standard-error units:
+
+$$t=\frac{\bar{x}-\mu_0}{s/\sqrt{n}}.$$
+
+I simulate **50,000 new samples under the null model**, calculating this statistic each time. Orange regions mark the most extreme 5% of the null distribution when confidence is 95%. They are the rejection regions for a test with significance level 0.05.
+
+For the displayed sample, observed t is **{{t_obs}}** and the simulated two-sided p-value is **{{p_value}}**. Blue bars identify null results at least as extreme in absolute value as observed t. This p-value exceeds 0.05, so we **do not reject** the 30-minute claim. That does not prove it true; a p-value is not the probability that the null is true.
+
+Switch the claimed mean to 31 and inspect the changed result. This is a teaching comparison, not permission to search for a significant hypothesis after viewing data. The test and percentile-bootstrap interval are different procedures, so their decisions need not coincide exactly.
+
+The lesson is to report uncertainty with the estimate, check a method through repeated sampling, and interpret evidence relative to a clearly stated claim. A confidence level describes long-run performance; a p-value describes how unusual the observed statistic would be under a model.
+
+## Sources and replication
+
+Methods: [SciPy’s percentile-bootstrap explanation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html) and the [NIST guide to confidence intervals and one-sample t-tests](https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm). All data are generated by the documented normal model with seed **20261101**. [Code, configuration, saved simulation results, and replication instructions](https://github.com/ywang818-max/website/tree/main/blog/posts/post8) accompany the article; the interactive controls select those reproducible experiments.
