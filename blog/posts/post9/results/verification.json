@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "checked_test_targets": 17955,
+  "checked_portfolio_rows": 40,
+  "checked_cost_combinations": 12,
+  "class_pairs": 45,
+  "scope": "Every saved target, portfolio return, weight sum, ranking selection, RMSE and cost-compounded final wealth; paired class statistics independently matched R."
+}

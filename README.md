@@ -54,3 +54,7 @@ Run `python3 blog/posts/post7/code/build.py` from this repository root. The arch
 The [Blog 8 README](blog/posts/post8/README.md) documents the fixed normal simulation model, random streams, complete file map and replication commands. The [interactive article](https://ywang818-max.github.io/website/blog/posts/post8/) links one-sample bootstrap intervals, repeated-sample coverage and Monte Carlo t-tests.
 
 Install `blog/posts/post8/code/requirements.txt`, then run `python3 blog/posts/post8/code/build.py`. All observations are simulated; code generates saved CSV results, the plotting payload, the lab and numeric article text offline. See [validation evidence](blog/posts/post8/REPRODUCTION_CHECK.md).
+
+## Blog 9
+
+[Stock prediction article](https://ywang818-max.github.io/website/blog/posts/post9/) · [Code, frozen data and replication instructions](blog/posts/post9/README.md).

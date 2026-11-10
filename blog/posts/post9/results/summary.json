@@ -1,0 +1,167 @@
+{
+  "class": {
+    "pairs": 45,
+    "intuition_mean": 101178.60755555557,
+    "indicator_mean": 103087.49844444444,
+    "difference": 1908.8908888888882,
+    "ci95": [
+      -379.71800535344937,
+      4197.499783131226
+    ],
+    "p_two_sided": 0.09985230056350661,
+    "indicator_wins": 30
+  },
+  "stocks": 95,
+  "excluded": [
+    "BK: Yahoo endpoint returned HTTP 400; excluded before model fitting"
+  ],
+  "calendar_start": "2022-01-03",
+  "calendar_end": "2025-10-31",
+  "train_rows": 33725,
+  "val_rows": 22040,
+  "test_rows": 17955,
+  "train_signal_end": "2023-11-30",
+  "train_label_end": "2023-12-29",
+  "val_label_end": "2024-12-31",
+  "test_signal_start": "2025-01-02",
+  "test_signal_end": "2025-10-03",
+  "first_entry": "2025-01-03",
+  "last_exit": "2025-10-21",
+  "passive_spy": {
+    "0": 0.14396821646818236,
+    "10": 0.1416814240034625,
+    "25": 0.13825552518719442
+  },
+  "blocks": 10,
+  "selected": {
+    "depth": 2,
+    "trees": 100,
+    "lambda": 10,
+    "validation_rmse": 0.07810724673711832
+  },
+  "prediction": [
+    {
+      "model": "Original",
+      "rmse": 0.0950239664205292,
+      "mae": 0.06972285039721171,
+      "direction_accuracy": 0.5214146477304372
+    },
+    {
+      "model": "Revised",
+      "rmse": 0.08842633766639382,
+      "mae": 0.06494014521149047,
+      "direction_accuracy": 0.5298245614035088
+    },
+    {
+      "model": "Training mean",
+      "rmse": 0.08855257755036146,
+      "mae": 0.06464843426937558,
+      "direction_accuracy": 0.5577833472570315
+    }
+  ],
+  "investment": [
+    {
+      "strategy": "Original",
+      "cost_bps_each_side": 0,
+      "cumulative_return": 0.36031846263694867,
+      "periods": 10,
+      "mean_block_return": 0.03213629238641961,
+      "worst_block": -0.0362359186243304
+    },
+    {
+      "strategy": "Original",
+      "cost_bps_each_side": 10,
+      "cumulative_return": 0.3333690096987689,
+      "periods": 10,
+      "mean_block_return": 0.030073051937939188,
+      "worst_block": -0.03816248302300029
+    },
+    {
+      "strategy": "Original",
+      "cost_bps_each_side": 25,
+      "cumulative_return": 0.2938939424109659,
+      "periods": 10,
+      "mean_block_return": 0.026982061776315024,
+      "worst_block": -0.041048715505700106
+    },
+    {
+      "strategy": "Revised",
+      "cost_bps_each_side": 0,
+      "cumulative_return": 0.4147849751876358,
+      "periods": 10,
+      "mean_block_return": 0.03612889729867189,
+      "worst_block": -0.029302913579706713
+    },
+    {
+      "strategy": "Revised",
+      "cost_bps_each_side": 10,
+      "cumulative_return": 0.38675647880705055,
+      "periods": 10,
+      "mean_block_return": 0.034057675632971865,
+      "worst_block": -0.031243337055460896
+    },
+    {
+      "strategy": "Revised",
+      "cost_bps_each_side": 25,
+      "cumulative_return": 0.3457008483592785,
+      "periods": 10,
+      "mean_block_return": 0.030954728617786764,
+      "worst_block": -0.03415033215501795
+    },
+    {
+      "strategy": "Equal weight",
+      "cost_bps_each_side": 0,
+      "cumulative_return": 0.13918155105550034,
+      "periods": 10,
+      "mean_block_return": 0.013505866977109792,
+      "worst_block": -0.030794988567685033
+    },
+    {
+      "strategy": "Equal weight",
+      "cost_bps_each_side": 10,
+      "cumulative_return": 0.11661307136384003,
+      "periods": 10,
+      "mean_block_return": 0.01147986874902258,
+      "worst_block": -0.03273242938553822
+    },
+    {
+      "strategy": "Equal weight",
+      "cost_bps_each_side": 25,
+      "cumulative_return": 0.08355517380816946,
+      "periods": 10,
+      "mean_block_return": 0.008444672053892955,
+      "worst_block": -0.03563495609352507
+    },
+    {
+      "strategy": "SPY",
+      "cost_bps_each_side": 0,
+      "cumulative_return": 0.10711277965553734,
+      "periods": 10,
+      "mean_block_return": 0.010716980887483596,
+      "worst_block": -0.0414105083566898
+    },
+    {
+      "strategy": "SPY",
+      "cost_bps_each_side": 10,
+      "cumulative_return": 0.08517961872883206,
+      "periods": 10,
+      "mean_block_return": 0.008696557642689551,
+      "worst_block": -0.04332672875048471
+    },
+    {
+      "strategy": "SPY",
+      "cost_bps_each_side": 25,
+      "cumulative_return": 0.053052324516143834,
+      "periods": 10,
+      "mean_block_return": 0.00566971296417682,
+      "worst_block": -0.046197464630583496
+    }
+  ],
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "pandas": "2.2.3",
+    "xgboost": "3.1.1"
+  },
+  "snapshot_sha256": "6ec2234b331042eb7845a65692934723a8c4c61cddc439c97d49d384880d841c"
+}
