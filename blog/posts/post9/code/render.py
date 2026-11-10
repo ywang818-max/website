@@ -93,7 +93,7 @@ card=card.replace('post8','post9').replace('results/preview.svg','results/invest
 if 'posts/post9/index.html' not in ls:listing.write_text(ls[:start]+card+ls[start:])
 # Keep listing sort indices and category encoding coherent after inserting a card.
 import base64,datetime
-ls=listing.read_text();ls=re.sub(r'(<div class="quarto-post image-right"[^>]*data-index=")\d+("[^>]*>)',lambda m:m.group(1)+str(next(counter))+m.group(2),ls) if False else ls
+ls=listing.read_text()
 counter=iter(range(100));ls=re.sub(r'data-index="\d+"',lambda m:'data-index="'+str(next(counter))+'"',ls)
 pos=ls.index('posts/post9/index.html'); begin=ls.rfind('<div class="quarto-post image-right"',0,pos); end=ls.index('>',begin)
 tag=ls[begin:end];tag=re.sub(r'data-categories="[^"]*"','data-categories="'+base64.b64encode(b'Machine%20Learning%2CStocks%2CGradient%20Boosting').decode()+'"',tag);tag=re.sub(r'data-listing-date-sort="[^"]*"','data-listing-date-sort="1794200400000"',tag);tag=re.sub(r'data-listing-word-count-sort="[^"]*"',f'data-listing-word-count-sort="{words}"',tag)
